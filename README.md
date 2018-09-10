@@ -14,4 +14,4 @@ Please bare in mind that—just as the official Nano software—Nawano uses the 
 
 Author
 ------
-Robert Wikman <rbw@vault13.org>
+Robert Wikman \<rbw@vault13.org\>
