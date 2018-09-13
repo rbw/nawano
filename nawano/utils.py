@@ -43,7 +43,8 @@ def render_table(header, body):
 def password_input(validate_confirm=False, pw1_text='password: ', pw2_text='confirm: '):
     qv = PasswordQualityValidator() if validate_confirm else None
     if qv:
-        stdout.write('\n{0}\n\n'.format('\n'.join(PW_MESSAGE_INFO)))
+        pre_prompt = 'enter the desired password to proceed or <ctrl+d> to cancel'
+        stdout.write('\n{0}\n\n{1}\n'.format('\n'.join(PW_MESSAGE_INFO), pre_prompt))
 
     try:
         password1 = prompt(pw1_text, is_password=True, validator=qv).encode('utf-8')
