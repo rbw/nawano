@@ -117,7 +117,7 @@ class NawanoCompletion(object):
             if opt in self.args:
                 continue
 
-            yield opt, opt.lstrip('--'), param.help
+            yield opt, None, param.help
 
     def _get_arguments(self, param):
         for opt in param.type.choices:
