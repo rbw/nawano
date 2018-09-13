@@ -5,6 +5,7 @@ import click
 from prompt_toolkit.completion import Completion
 
 from nawano.services import wallet_service, config_service, alias_service, rep_service, state_service
+from nawano.exceptions import NoActiveWallet
 
 
 class NawanoCompletion(object):
@@ -83,11 +84,11 @@ class NawanoCompletion(object):
     @property
     def _suggestions(self):
         if self.req_accounts or self.req_accounts_balances:
-            wallet = state_service.wallet
-            if not wallet:
+            try:
+                accounts = state_service.get_accounts()
+            except NoActiveWallet:
                 return [['', 'requires an active wallet', None]]
             else:
-                accounts = state_service.get_accounts()
                 if accounts:
                     return self._suggest_from_objs(accounts, meta_key='balance')
                 else:

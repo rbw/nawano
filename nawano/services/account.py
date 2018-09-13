@@ -101,7 +101,7 @@ class AccountService(NawanoService):
             ]
 
     def get_table(self, **kwargs):
-        accounts = self.__state__.accounts(**kwargs)
+        accounts = self.__state__.get_accounts(**kwargs)
 
         if not accounts:
             raise NawanoError('no accounts found')
