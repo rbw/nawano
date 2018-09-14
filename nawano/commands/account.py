@@ -38,7 +38,7 @@ def _validate_account_idx(ctx, param, value):
 
 @root_group.group('account', short_help='account operations')
 def account_group():
-    pass
+    assert state_service.wallet
 
 
 @account_group.command('create', short_help='create account')
