@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from sys import stdout
-from datetime import datetime
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 
 from click.exceptions import UsageError
 from nawano.exceptions import NawanoError, NoActiveWallet
 
-from nawano.services import config_service, state_service
+from nawano.services import state_service
 from nawano.settings import PROMPT_COLOR_DEPTH, HISTORY_PATH, PROMPT_STYLE
 from nawano.utils import stylize
 from nawano.repl import completion, completer
