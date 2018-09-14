@@ -38,29 +38,42 @@ PW_MESSAGE_INFO = [
 
 DEFAULT_CORE_SETTINGS = [
     {
-        'name': 'pending_cooldown',
+        'name': 'pending_check',
         'value': '30',
-        'description': 'pending notification cool-down',
+        'description': 'pending funds check interval',
         'type': 'int'
     },
     {
-        'name': 'balance_sync_interval',
+        'name': 'weight_check',
+        'value': '30',
+        'description': 'representative weight check interval',
+        'type': 'int'
+    },
+    {
+        'name': 'balance_refresh',
         'value': '10',
-        'description': 'balance sync interval',
+        'description': 'balance refresh interval',
         'type': 'int'
     },
     {
-        'name': 'rep_sync_interval',
+        'name': 'reps_refresh',
         'value': '50',
-        'description': 'representatives sync interval',
+        'description': 'representatives refresh interval',
         'type': 'int'
+    },
+    {
+        'name': 'max_weight',
+        'value': '4.0',
+        'description': 'representative max weight',
+        'type': 'float'
     },
     {
         'name': 'backend',
         'value': 'https://getcanoe.io/rpc',
         'description': 'node network relay',
         'type': 'str'
-    }
+    },
 ]
+
 
 ADDRESS_PREFIX = 'xrb'
