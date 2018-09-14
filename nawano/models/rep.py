@@ -10,9 +10,10 @@ from ._base import BaseMixin
 class Representative(Base, BaseMixin):
     __tablename__ = 'representative'
 
+    alias = Column(String, primary_key=True)
     address = Column(String, primary_key=True)
-    alias = Column(String, nullable=False)
     uptime = Column(String, nullable=False)
     delegators = Column(Integer, nullable=False)
     weight = Column(String, nullable=False)
     updated_on = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
+
