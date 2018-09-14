@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from nanopy.crypto import nano_account, account_nano
-from nawano.utils import decrypt
 from ._base import NawanoService
 
 
