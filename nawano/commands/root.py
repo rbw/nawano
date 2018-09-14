@@ -9,7 +9,7 @@ from nawano.repl.loop import nawano_loop
 from nawano.utils import stylize
 from nawano.services import config_service, account_service, rep_service, state_service
 from nawano.task import Task
-from nawano.exceptions import NoActiveWallet
+from nawano.exceptions import NoActiveWallet, RepresentativeTooHeavy
 
 
 def pending_notify():
@@ -32,10 +32,11 @@ def weight_notify():
     except NoActiveWallet:
         return
 
-    if Decimal(representative.weight) > Decimal(config_service.max_weight):
-        stdout.write('\n- your representative is too heavy, use {0} to change\n'.format(
+    if Decimal(representative.weight) > Decimal(config_service.get('max_weight').value):
+        """stdout.write('\n- your representative is too heavy, use {0} to change\n'.format(
             stylize('wallet representative', color='yellow')
-        ))
+        ))"""
+        raise RepresentativeTooHeavy
 
 
 def tasks_start(tasks_args):
@@ -62,10 +63,10 @@ def root_group(ctx):
         # Start worker threads
         tasks = tasks_start(
             [
-                [account_service.refresh_balances, config_service.balance_refresh_interval],
-                [rep_service.refresh_reps, config_service.reps_refresh_interval],
-                [pending_notify, config_service.pending_check_interval],
-                [weight_notify, config_service.rep_check_interval]
+                [account_service.refresh_balances, config_service.get('balance_refresh').value],
+                [rep_service.refresh_reps, config_service.get('reps_refresh').value],
+                [pending_notify, config_service.get('pending_check').value],
+                [weight_notify, config_service.get('weight_check').value]
             ]
         )
 

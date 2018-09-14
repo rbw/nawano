@@ -5,6 +5,10 @@ class NawanoError(Exception):
     pass
 
 
+class RepresentativeTooHeavy(Exception):
+    pass
+
+
 class UnexpectedBackendResponse(NawanoError):
     def __init__(self, message):
         self.message = message
