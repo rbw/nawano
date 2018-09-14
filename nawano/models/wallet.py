@@ -2,7 +2,7 @@
 
 import uuid
 
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, DateTime, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -21,8 +21,14 @@ class Wallet(Base, BaseMixin):
     seed = Column(String, nullable=False)
     created_on = Column(DateTime, default=func.now(), nullable=False)
 
-    rep_addr = Column(String, ForeignKey('representative.address'))
-    representative = relationship(Representative, foreign_keys=rep_addr)
+    representative_address = Column(String)
+    representative_alias = Column(String)
+    representative = relationship(Representative, lazy=False)
+
+    ForeignKeyConstraint(
+        (representative_address, representative_alias),
+        (Representative.address, Representative.alias)
+    ),
 
     @classmethod
     def update(cls, wallet_id, **kwargs):
@@ -43,3 +49,11 @@ class Wallet(Base, BaseMixin):
             'pending': sum([a.pending for a in accounts])
         }
 
+    """@classmethod
+    def get_funds(cls, wallet_id):
+        accounts = cls.query(id=wallet_id).one().accounts
+
+        for a in accounts:
+            print(a)
+
+        return {(sum(a.balance), sum(a.pending)) for a in accounts}"""
