@@ -31,9 +31,6 @@ def _config_attribute_set(name, value):
 @click.argument('attribute', required=False)
 @click.argument('value', required=False)
 def config_group(attribute=None, value=None):
-    # config_service.__state__.representative()
-    rep_service.sync()
-
     name = attribute
     if not name:
         stdout.write(config_service.table)
