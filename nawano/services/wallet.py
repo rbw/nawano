@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from nawano.models import Wallet, Account
+from nawano.models import Wallet, Account, Representative
 from nawano.exceptions import NawanoError, NoSuchWallet
 from nawano.utils import encrypt, generate_seed, stylize
 
@@ -39,13 +39,9 @@ class WalletService(NawanoService):
         return self.get_text_table(self._table_header, self._get_table_body(wallets))
 
     def _format_rep_details(self, rep):
-        text_pre = 'representative: '
-        if not rep:
-            return text_pre + stylize('none configured', color='red')
-
         return (
-            '{0}\n- name: {0}\n address: {1}\n weight: {2}\n uptime: {3}\n\n'
-            .format(text_pre, rep.alias, rep.address, rep.weight, rep.uptime)
+            '\n name: {0}\n address: {1}\n weight: {2}\n uptime: {3:0.2f}%\n'
+            .format(rep.alias, rep.address, rep.weight, float(rep.uptime))
         )
 
     def get_details(self, **kwargs):
@@ -56,15 +52,19 @@ class WalletService(NawanoService):
         funds = self.__model__.get_funds(wallet.id)
         accounts = Account.query(wallet_id=wallet.id).all()
 
+        if not wallet.representative_address:
+            rep_text = stylize('none configured', color='red')
+        elif isinstance(wallet.representative, Representative):
+            rep_text = self._format_rep_details(wallet.representative)
+        else:
+            rep_text = '\n address: {0}\n'.format(wallet.representative_address)
+
         return self._format_output([
             self.get_header('wallet'),
             'name: {0}'.format(wallet.name),
             'created_on: {0}'.format(wallet.created_on),
             'synced_on: {0}'.format(self.__state__.synced_on),
-            self._format_rep_details(wallet.representative),
             'accounts: {0}'.format(len(accounts)),
-            'balance: {0} ({1})'.format(
-                funds['balance'],
-                '{0} pending'.format(self.get_count_styled(funds['pending']))
-            ) + '\n\n'
+            'representative: {0}'.format(rep_text),
+            'funds: \n balance: {0} \n pending: {1}\n\n'.format(funds['balance'], funds['pending']),
         ])
