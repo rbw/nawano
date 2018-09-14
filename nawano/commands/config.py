@@ -4,7 +4,7 @@ import click
 from sys import stdout
 from requests.exceptions import RequestException
 
-from nawano.services import config_service, rep_service
+from nawano.services import config_service
 from nawano.status import with_status
 from nawano.exceptions import NawanoError
 from nawano.clients import RPC
@@ -22,8 +22,9 @@ def _test_backend(uri):
 
 @with_status(text='update config attribute')
 def _config_attribute_set(name, value):
-    updated = config_service.set_attribute(name, value)
-    msg = '{0} updated'.format(updated.name)
+    config_service.set(name, value)
+    updated = config_service.get(name)
+    msg = '{0} is now {1}'.format(updated.name, updated.value)
     return None, msg
 
 
@@ -41,6 +42,6 @@ def config_group(attribute=None, value=None):
 
         _config_attribute_set(name, value)
     else:
-        attr = config_service.get_attribute(name)
+        attr = config_service.get(name)
         stdout.write('{0}\n\n'.format(attr.value))
 
