@@ -7,7 +7,7 @@ from sys import stdout
 from nanopy.crypto import pow_generate, nano_account, seed_keys, sign_block
 from nawano.services import block_service, wallet_service, account_service, alias_service, state_service
 from nawano.status import with_status
-from nawano.utils import password_input, decrypt, from_raw
+from nawano.utils import password_input, decrypt
 from nawano.exceptions import NawanoError
 from .root import root_group
 
@@ -58,7 +58,10 @@ def _refresh_balances():
 
 @root_group.group('funds', short_help='send or receive funds')
 def funds_group():
-    pass
+    if not state_service.get_accounts():
+        raise NawanoError('this operation requires an account')
+    elif not state_service.wallet.representative_address:
+        raise NawanoError('this operation requires a wallet representative')
 
 
 @funds_group.command('send', short_help='send funds')
