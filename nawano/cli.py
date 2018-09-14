@@ -7,7 +7,7 @@ from nawano.models import meta_create_all, State
 from nawano.commands import cli
 from nawano.status import with_status
 from nawano.settings import NAWANO_HOME, HISTORY_PATH, DEFAULT_CORE_SETTINGS
-from nawano.services import config_service, state_service
+from nawano.services import config_service
 
 
 @with_status(text='creating home')
@@ -42,8 +42,6 @@ def run():
         _home_create()
         _history_touch()
         _database_seed()
-
-    state_service.is_syncing = False
 
     # Invoke CLI
     cli(prog_name='nawano')
