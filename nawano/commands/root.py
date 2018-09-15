@@ -2,14 +2,13 @@
 
 import click
 
-from decimal import Decimal
 from sys import stdout
 from nawano import REPL_LOGO
 from nawano.repl.loop import nawano_loop
 from nawano.utils import stylize
 from nawano.services import config_service, account_service, rep_service, state_service
 from nawano.task import Task
-from nawano.exceptions import NoActiveWallet, RepresentativeTooHeavy
+from nawano.exceptions import NoActiveWallet
 
 
 def pending_notify():
@@ -32,11 +31,12 @@ def weight_notify():
     except NoActiveWallet:
         return
 
-    if Decimal(representative.weight) > Decimal(config_service.get('max_weight').value):
-        """stdout.write('\n- your representative is too heavy, use {0} to change\n'.format(
+    max_weight = config_service.get('max_weight').value
+
+    if representative.weight > max_weight:
+        stdout.write('\ninfo: your representative has too much weight, use {0} to change\n'.format(
             stylize('wallet representative', color='yellow')
-        ))"""
-        raise RepresentativeTooHeavy
+        ))
 
 
 def tasks_start(tasks_args):
@@ -47,6 +47,10 @@ def tasks_start(tasks_args):
         tasks.append(task)
 
     return tasks
+
+
+def get_cfg(key):
+    return config_service.get(key).value
 
 
 @click.group(invoke_without_command=True)
@@ -63,10 +67,10 @@ def root_group(ctx):
         # Start worker threads
         tasks = tasks_start(
             [
-                [account_service.refresh_balances, config_service.get('balance_refresh').value],
-                [rep_service.refresh_reps, config_service.get('reps_refresh').value],
-                [pending_notify, config_service.get('pending_check').value],
-                [weight_notify, config_service.get('weight_check').value]
+                [account_service.refresh_balances, get_cfg('balance_refresh')],
+                [rep_service.refresh_reps, get_cfg('reps_refresh')],
+                [pending_notify, get_cfg('pending_check')],
+                [weight_notify, get_cfg('weight_check')]
             ]
         )
 
