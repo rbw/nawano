@@ -64,7 +64,7 @@ class WalletService(NawanoService):
             'name: ' + wallet.name,
             'created_on: ' + str(wallet.created_on),
             'synced_on: ' + str(self.__state__.synced_on),
-            'accounts: '.format(len(accounts)),
+            'accounts: {0}'.format(len(accounts)),
             self.get_highlighted('funds') + self.funds_text(funds),
             self.get_highlighted('representative') + rep_text + '\n',
         ])
