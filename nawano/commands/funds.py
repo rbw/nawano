@@ -29,7 +29,7 @@ def _validate_send(payload):
     elif amount <= 0:
         raise NawanoError('amount must be greater than 0')
     elif account_from.balance < amount:
-        raise NawanoError('insufficient funds: {0}'.format(account_from.balance))
+        raise NawanoError('insufficient funds')
 
     return account_from, recipient_alias, amount
 
