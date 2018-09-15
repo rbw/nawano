@@ -42,6 +42,6 @@ class NawanoCompleter(Completer):
             self._completion.args = self._text_before
         except ValueError:
             # Invalid input, often caused by missing closing quotation.
-            return
+            return []
 
         return self._completion.get_matches(self._query, self._command)
