@@ -40,8 +40,8 @@ class WalletService(NawanoService):
 
     def _format_rep_details(self, rep):
         return (
-            '\n name: {0}\n address: {1}\n weight: {2}\n uptime: {3:0.2f}%\n'
-            .format(rep.alias, rep.address, rep.weight, float(rep.uptime))
+            '\n{0}name: {1}\n{0}address: {2}\n{0}weight: {3}\n{0}uptime: {4:0.2f}%\n'
+            .format(' '*2, rep.alias, rep.address, rep.weight, float(rep.uptime))
         )
 
     def get_details(self, **kwargs):
@@ -53,11 +53,11 @@ class WalletService(NawanoService):
         accounts = Account.query(wallet_id=wallet.id).all()
 
         if not wallet.representative_address:
-            rep_text = stylize('none configured', color='red')
+            rep_text = stylize('\n  none configured\n', color='red')
         elif isinstance(wallet.representative, Representative):
             rep_text = self._format_rep_details(wallet.representative)
         else:
-            rep_text = '\n address: {0}\n'.format(wallet.representative_address)
+            rep_text = '\n  address: {0}\n'.format(wallet.representative_address)
 
         return self._format_output([
             self.get_header('wallet'),
@@ -65,6 +65,6 @@ class WalletService(NawanoService):
             'created_on: {0}'.format(wallet.created_on),
             'synced_on: {0}'.format(self.__state__.synced_on),
             'accounts: {0}'.format(len(accounts)),
-            'representative: {0}'.format(rep_text),
-            'funds: \n balance: {0} \n pending: {1}\n\n'.format(funds['balance'], funds['pending']),
+            self.get_highlighted('funds') + self.funds_text(funds),
+            self.get_highlighted('representative') + rep_text + '\n',
         ])

@@ -15,7 +15,7 @@ class ConfigService(NawanoService):
 
     @property
     def table(self):
-        return self.get_text_table(self._table_header, self._table_body) + '\n'
+        return self.get_text_table(self._table_header, self._table_body)
 
     @property
     def _table_body(self):
