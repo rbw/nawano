@@ -2,8 +2,8 @@
 
 import click
 from sys import stdout
-from nanopy.crypto import account_nano
-from nawano.services import wallet_service, account_service, state_service
+from nanopy.crypto import account_nano, nano_account
+from nawano.services import account_service, state_service
 from nawano.status import with_status
 from nawano.utils import password_input
 from nawano.exceptions import NawanoError
@@ -28,10 +28,10 @@ def _validate_account_idx(ctx, param, value):
     if not value:
         return
 
-    account = wallet_service.active.get_accounts(idx=value)
+    account = state_service.get_accounts(idx=value)
 
     if account:
-        raise NawanoError('this index is already used by account: {0}'.format(account[0].name))
+        raise NawanoError('this index already belongs to account: {0}'.format(account[0].name))
 
     return value
 
@@ -50,10 +50,14 @@ def account_create(**kwargs):
 
 
 @account_group.command('show', short_help='show wallet details')
-@click.option('--name', 'name', help='account name', required=True)
+@click.option('--name', 'name', help='account name', required=False)
 @click.option('--address', 'address', help='account address', required=False)
-@click.option('--index', 'index', help='account index', required=False)
+@click.option('--index', 'idx', help='account index', required=False)
 def account_show(**kwargs):
+    if not any([kwargs['name'], kwargs['address'], kwargs['idx']]):
+        raise NawanoError('you must provide name, address or index')
+
+    kwargs['public_key'] = nano_account(kwargs.pop('address')) if kwargs['address'] else None
     stdout.write(account_service.get_details(**kwargs))
 
 
