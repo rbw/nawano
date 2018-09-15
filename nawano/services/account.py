@@ -65,9 +65,6 @@ class AccountService(NawanoService):
         self.__state__.synced_on = datetime.now().replace(microsecond=0)
 
     def get_details(self, **kwargs):
-        if not self.__state__:
-            raise NoActiveWallet
-
         account = self.get_one(wallet_id=self.__state__.wallet.id, **kwargs)
 
         if not account:
@@ -75,15 +72,16 @@ class AccountService(NawanoService):
 
         return self._format_output([
             self.get_header('account'),
+            'index: {0}'.format(account.idx),
             'name: {0}'.format(account.name),
+            'created_on: {0}'.format(account.created_on),
             'address: {0}'.format(account_nano(account.public_key)),
             'public_key: {0}'.format(account.public_key.upper()),
-            'index: {0}'.format(account.idx),
-            'created_on: {0}'.format(account.created_on),
-            'balance: {0} ({1})'.format(
-                account.balance,
-                '{0} pending'.format(self.get_count_styled(account.pending))
-            ) + '\n\n'
+            self.get_highlighted('funds') + self.funds_text({
+                'balance': account.balance,
+                'pending': account.pending,
+            }),
+            '\n',
         ])
 
     @property
