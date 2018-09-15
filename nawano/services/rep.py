@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from decimal import Decimal
 
 from nawano.models import Representative, ConfigAttribute
 from nawano.settings import REPRESENTATIVES_URI
@@ -17,7 +18,7 @@ class RepresentativeService(NawanoService):
 
         return (
             self.__model__.query(**kwargs)
-                .filter(self.__model__.weight < max_weight * 0.8)
+                .filter(self.__model__.weight < max_weight * 0.9)
                 .order_by(Representative.weight.asc())
                 .order_by(Representative.uptime.desc())
                 .all()
@@ -31,8 +32,9 @@ class RepresentativeService(NawanoService):
                 if 'alias' not in rep:
                     continue
 
-                rep['weight'] = rep.pop('votingweight')
+                rep['weight'] = str(rep.pop('votingweight'))[:4]
                 rep['address'] = rep.pop('account')
+
                 existing = self.__model__.query(address=rep['address']).one_or_none()
 
                 if not existing:
