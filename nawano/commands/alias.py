@@ -57,7 +57,7 @@ def alias_create(**kwargs):
     _alias_create(**kwargs)
 
 
-@alias_group.command('show', short_help='show alias details by name or address')
+@alias_group.command('show', short_help='show alias details')
 @click.option('--name', 'name', help='by name')
 @click.option('--address', 'address', help='by address')
 def alias_show(**kwargs):
