@@ -18,7 +18,7 @@ class WalletService(NawanoService):
 
     @property
     def _table_header(self):
-        return ['name', 'accounts', 'balance', 'pending']
+        return ['name', 'accounts', 'available', 'pending']
 
     def _get_table_body(self, wallets):
         for w in wallets:
@@ -27,7 +27,7 @@ class WalletService(NawanoService):
             yield [
                 w.name,
                 len(accounts),
-                funds['balance'],
+                funds['available'],
                 funds['pending']
             ]
 
@@ -53,7 +53,7 @@ class WalletService(NawanoService):
         accounts = Account.query(wallet_id=wallet.id).all()
 
         if not wallet.representative_address:
-            rep_text = stylize('\n  none configured\n', color='red')
+            rep_text = stylize('\n  not set\n', color='red')
         elif isinstance(wallet.representative, Representative):
             rep_text = self._format_rep_details(wallet.representative)
         else:
@@ -61,10 +61,10 @@ class WalletService(NawanoService):
 
         return self._format_output([
             self.get_header('wallet'),
-            'name: {0}'.format(wallet.name),
-            'created_on: {0}'.format(wallet.created_on),
-            'synced_on: {0}'.format(self.__state__.synced_on),
-            'accounts: {0}'.format(len(accounts)),
+            'name: ' + wallet.name,
+            'created_on: ' + str(wallet.created_on),
+            'synced_on: ' + str(self.__state__.synced_on),
+            'accounts: '.format(len(accounts)),
             self.get_highlighted('funds') + self.funds_text(funds),
             self.get_highlighted('representative') + rep_text + '\n',
         ])

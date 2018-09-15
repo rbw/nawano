@@ -49,7 +49,7 @@ class NawanoService(object):
         return self.__state__.network.validate_address(address)
 
     def funds_text(self, funds):
-        return '\n{0}balance: {1} \n{0}pending: {2}'.format(' '*2, funds['balance'], funds['pending'])
+        return '\n{0}available: {1} \n{0}pending: {2}'.format(' '*2, funds['available'], funds['pending'])
 
     def get_highlighted(self, text):
         return '\n({0})'.format(text)

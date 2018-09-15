@@ -32,8 +32,8 @@ def get_bottom_toolbar():
         ('class:bottom-toolbar-logo', ' ⩫ '),
         ('class:bottom-toolbar-key', 'wallet:'),
         ('class:bottom-toolbar-value', '{0}'.format(wallet.name)),
-        ('class:bottom-toolbar-key', ' · balance:'),
-        ('class:bottom-toolbar-value', '{0}'.format(state_service.wallet_funds['balance'])),
+        ('class:bottom-toolbar-key', ' · available:'),
+        ('class:bottom-toolbar-value', '{0}'.format(state_service.wallet_funds['available'])),
         ('class:bottom-toolbar-key', ' · pending:'),
         (pending_class, '{0}'.format(state_service.wallet_funds['pending'])),
     ]

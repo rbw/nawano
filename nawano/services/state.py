@@ -25,10 +25,6 @@ class StateService(object):
         return self.wallet.get_funds(self.wallet.id)
 
     @property
-    def representative(self):
-        return ConfigAttribute.get_one(name='representative').value
-
-    @property
     def network(self):
         return RPC(ConfigAttribute.get_one('backend').value)
 

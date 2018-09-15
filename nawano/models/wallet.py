@@ -44,8 +44,9 @@ class Wallet(Base, BaseMixin):
     @classmethod
     def get_funds(cls, wallet_id):
         accounts = Account.query(wallet_id=wallet_id).all()
+
         return {
-            'balance': sum([a.balance for a in accounts]),
+            'available': sum([a.available for a in accounts]),
             'pending': sum([a.pending for a in accounts])
         }
 
@@ -56,4 +57,4 @@ class Wallet(Base, BaseMixin):
         for a in accounts:
             print(a)
 
-        return {(sum(a.balance), sum(a.pending)) for a in accounts}"""
+        return {(sum(a.available), sum(a.pending)) for a in accounts}"""

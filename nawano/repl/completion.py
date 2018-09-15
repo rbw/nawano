@@ -90,7 +90,7 @@ class NawanoCompletion(object):
                 return [['', 'requires an active wallet', None]]
             else:
                 if accounts:
-                    return self._suggest_from_objs(accounts, meta_key='balance')
+                    return self._suggest_from_objs(accounts, meta_key='available')
                 else:
                     return [['', 'no accounts found', None]]
         elif self.req_backends:

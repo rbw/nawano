@@ -27,9 +27,9 @@ class AliasService(NawanoService):
 
         return self._format_output([
             self.get_header('alias'),
-            'name: {0}'.format(alias.name),
-            'address: {0}'.format(alias.address),
-            'description: {0}'.format(alias.description)
+            'name: ' + alias.name,
+            'address: ' + alias.address,
+            'description: ' + alias.description
         ]) + '\n\n'
 
     def get_table(self, **kwargs):

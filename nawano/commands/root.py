@@ -81,7 +81,7 @@ def root_group(ctx):
         for task in tasks:
             task.stop()
 
-        stdout.write('\nnawano loop stopped.. buh-bye!\n')
+        stdout.write('\nnawano stopping.. buh-bye!\n')
 
 
 @root_group.command('exit', short_help='exit nawano')

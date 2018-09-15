@@ -45,7 +45,7 @@ class AccountService(NawanoService):
 
         for address, pending in self.__state__.pending_blocks:
             account = self.__state__.network.get_account(address)
-            balance_raw = account['balance'] if account else 0
+            available_raw = account['balance'] if account else 0
             pending_raw = 0
 
             if pending:
@@ -54,7 +54,7 @@ class AccountService(NawanoService):
 
             self.update_funds(
                 nano_account(address),
-                balance_raw=str(balance_raw),
+                available_raw=str(available_raw),
                 pending_raw=str(pending_raw)
             )
 
@@ -72,13 +72,13 @@ class AccountService(NawanoService):
 
         return self._format_output([
             self.get_header('account'),
-            'index: {0}'.format(account.idx),
-            'name: {0}'.format(account.name),
-            'created_on: {0}'.format(account.created_on),
-            'address: {0}'.format(account_nano(account.public_key)),
-            'public_key: {0}'.format(account.public_key.upper()),
+            'index: ' + str(account.idx),
+            'name: ' + account.name,
+            'created_on: ' + str(account.created_on),
+            'address: ' + account_nano(account.public_key),
+            'public_key: ' + account.public_key.upper(),
             self.get_highlighted('funds') + self.funds_text({
-                'balance': account.balance,
+                'available': account.available,
                 'pending': account.pending,
             }),
             '\n',
@@ -86,7 +86,7 @@ class AccountService(NawanoService):
 
     @property
     def _table_header(self):
-        return ['name', 'index', 'address', 'balance', 'pending']
+        return ['name', 'index', 'address', 'available', 'pending']
 
     def _get_table_body(self, accounts):
         for a in accounts:
@@ -94,7 +94,7 @@ class AccountService(NawanoService):
                 a.name,
                 a.idx,
                 '…{0}'.format(account_nano(a.public_key)[-8:]),
-                a.balance,
+                a.available,
                 a.pending
             ]
 

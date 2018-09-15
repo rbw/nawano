@@ -93,7 +93,7 @@ def wallet_show(**kwargs):
     stdout.write(wallet_service.get_details(**kwargs))
 
 
-@wallet_group.command('representative', short_help='set representative for accounts in this wallet')
+@wallet_group.command('representative', short_help='set representative')
 @click.argument('address', required=True)
 def wallet_set_representative(address):
     return _wallet_set_representative(address)

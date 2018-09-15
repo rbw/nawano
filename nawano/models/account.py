@@ -17,15 +17,15 @@ class Account(Base, BaseMixin):
     name = Column(String, nullable=False)
     wallet_id = Column(String, ForeignKey('wallet.id'), primary_key=True)
     public_key = Column(String, unique=True)
-    balance_raw = Column(Integer, nullable=False, default=0)
+    available_raw = Column(Integer, nullable=False, default=0)
     pending_raw = Column(Integer, nullable=False, default=0)
     created_on = Column(DateTime, default=func.now())
 
     UniqueConstraint(wallet_id, name, name='uc_wallet_account_name')
 
     @hybrid_property
-    def balance(self):
-        return from_raw(self.balance_raw)
+    def available(self):
+        return from_raw(self.available_raw)
 
     @hybrid_property
     def pending(self):
