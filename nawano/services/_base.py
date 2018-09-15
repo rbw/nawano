@@ -48,6 +48,12 @@ class NawanoService(object):
     def validate_address(self, address):
         return self.__state__.network.validate_address(address)
 
+    def funds_text(self, funds):
+        return '\n{0}balance: {1} \n{0}pending: {2}'.format(' '*2, funds['balance'], funds['pending'])
+
+    def get_highlighted(self, text):
+        return '\n({0})'.format(text)
+
     @staticmethod
     def get_header(text, color='yellow'):
         return '\n[{0}]'.format(stylize(text.upper(), color=color))
