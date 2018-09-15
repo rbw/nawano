@@ -1,49 +1,55 @@
 # -*- coding: utf-8 -*-
 
 from nanopy.crypto import nano_account, account_nano
+
+from nawano.utils import to_raw
 from ._base import NawanoService
 
 
-def calc_balance(v1, v2):
+def available_after_receive(v1, v2):
     return str(int(v1) + int(v2))
+
+
+def available_after_send(v1, v2):
+    return str(int(v1) - int(to_raw(v2)))
 
 
 class BlockService(NawanoService):
     @property
     def receivables(self):
-        for address, pending in self.__state__.network_pending:
+        for address, pending in self.__state__.pending_blocks:
             if not pending:
                 continue
 
             for _hash, block in pending.items():
-                account = self.__state__.client.get_account(address)
+                account = self.__state__.network.get_account(address)
                 previous = account['frontier'] if account else '0' * 64
                 work_hash = previous if account else nano_account(address)
 
-                new_balance = calc_balance(
+                new_balance = available_after_receive(
                     account['balance'], block['amount']
                 ) if account else block['amount']
 
                 yield {
-                    'representative': self.__state__.representative,
+                    'representative': self.__state__.wallet.representative_address,
                     'balance': new_balance,
                     'link': _hash,
                     'account': address,
                     'previous': previous,
                 }, work_hash
 
-    def get_sendblock(self, seed, account, recipient):
-        """account = self.__state__.client.get_account(account)
-        recipient = self.__state__.client.get_account(recipient)
+    def get_sendblock(self, account, alias_to, amount):
+        address = account_nano(account.public_key)
+        n_account = self.__state__.network.get_account(address)
+        new_balance = available_after_send(n_account['balance'], amount)
 
-        yield {
-                  'representative': self.__state__.representative,
-                  'balance': new_balance,
-                  'link': _hash,
-                  'account': address,
-                  'previous': previous,
-        }, work_hash"""
-        pass
+        return {
+              'representative': self.__state__.wallet.representative_address,
+              'balance': new_balance,
+              'link': nano_account(alias_to.address),
+              'account': address,
+              'previous': n_account['frontier']
+        }, n_account['frontier']
 
     def transaction_summary(self, account_from, alias_to, amount):
         return self._format_output([
@@ -54,4 +60,4 @@ class BlockService(NawanoService):
         ])
 
     def broadcast(self, block):
-        return self.__state__.client.broadcast_block(block)
+        return self.__state__.network.broadcast_block(block)

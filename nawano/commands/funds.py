@@ -28,7 +28,7 @@ def _validate_send(payload):
         raise NawanoError('option --recipient_alias must be a valid alias')
     elif amount <= 0:
         raise NawanoError('amount must be greater than 0')
-    elif account_from.balance < amount:
+    elif account_from.available < amount:
         raise NawanoError('insufficient funds')
 
     return account_from, recipient_alias, amount
@@ -74,12 +74,26 @@ def funds_send(**kwargs):
 
     stdout.write('\n---\nenter password to proceed or <ctrl+d> to cancel\n')
     password = password_input(validate_confirm=False)
-    seed = decrypt(wallet_service.active.seed, password).decode('ascii')
+    seed = decrypt(state_service.wallet.seed, password).decode('ascii')
 
-    stdout.write(block_service.get_sendblock(seed))
+    block, work_hash = block_service.get_sendblock(*validated)
+
+    stdout.write('\nprocessing {0}\n'.format(block['link']))
+
+    # Create PoW based on previous or PK
+    block['work'] = _pow_generate(work_hash)
+
+    # Sign block
+    block['signature'] = _block_sign(block, seed)
+
+    # Broadcast transaction
+    _block_broadcast(block)
+
+    # Refresh balances
+    _refresh_balances()
 
 
-@funds_group.command('pull', short_help='receive pending funds for this wallet')
+@funds_group.command('pull', short_help='receive pending funds')
 def funds_pull():
     p_tot = state_service.wallet_funds['pending']
 
@@ -90,12 +104,12 @@ def funds_pull():
     stdout.write('\npending: {0} ~ use <ctrl+d> to cancel\n'.format(p_tot))
 
     password = password_input(validate_confirm=False)
-    seed = decrypt(wallet_service.active.seed, password).decode('ascii')
+    seed = decrypt(state_service.wallet.seed, password).decode('ascii')
 
     for block, work_hash in block_service.receivables:
         stdout.write('\nprocessing {0}\n'.format(block['link']))
 
-        # Create PoW based on previous or PK
+        # Create PoW based on frontier
         block['work'] = _pow_generate(work_hash)
 
         # Sign block
