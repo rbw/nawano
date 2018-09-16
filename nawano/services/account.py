@@ -52,7 +52,7 @@ class AccountService(NawanoService):
                 pending_raw=str(pending_raw)
             )
 
-        self.__state__.wallet_funds.cache_clear()
+        self.__state__.get_wallet_funds.cache_clear()
 
     def get_details(self, **kwargs):
         account = self.get_one(wallet_id=self.__state__.wallet.id, raise_on_empty=True, **kwargs)
