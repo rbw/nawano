@@ -20,8 +20,8 @@ class ConfigService(NawanoService):
     @property
     def _table_body(self):
         def truncate(value):
-            if len(value) > 30:
-                return '{0}…'.format(value[:30])
+            if len(value) > 20:
+                return '{0}…'.format(value[:20])
 
             return value
 

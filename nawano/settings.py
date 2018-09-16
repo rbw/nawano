@@ -38,15 +38,9 @@ PW_MESSAGE_INFO = [
 
 DEFAULT_CORE_SETTINGS = [
     {
-        'name': 'pending_check',
+        'name': 'announce_cooldown',
         'value': '30',
-        'description': 'pending funds check interval',
-        'type': 'int'
-    },
-    {
-        'name': 'weight_check',
-        'value': '30',
-        'description': 'representative weight check interval',
+        'description': 'notification cooldown',
         'type': 'int'
     },
     {
@@ -69,7 +63,7 @@ DEFAULT_CORE_SETTINGS = [
     },
     {
         'name': 'backend',
-        'value': 'https://getcanoe.io/rpc',
+        'value': 'getcanoe.io/rpc',
         'description': 'node network relay',
         'type': 'str'
     },

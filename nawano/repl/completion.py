@@ -95,7 +95,7 @@ class NawanoCompletion(object):
                     return [['', 'no accounts found', None]]
         elif self.req_backends:
             return [
-                ('https://getcanoe.io/rpc', 'canoe', 'canoe RPC backend')
+                ('https://getcanoe.io/rpc', 'canoe', 'canoe RPC backend'),
             ]
         elif self.req_aliases:
             aliases = alias_service.get_many()
