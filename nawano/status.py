@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from functools import wraps, partial
+from functools import wraps
 from sys import stdout
 from nawano.utils import stylize
 from nawano.exceptions import NawanoError

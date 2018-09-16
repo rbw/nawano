@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy.orm.exc import NoResultFound
-from nawano.exceptions import ValidationError
+from nawano.exceptions import ValidationError, NoRecordsFound
 from nawano.utils import render_table, stylize
 from .state import StateService
 
@@ -10,24 +9,21 @@ class NawanoService(object):
     __model__ = None
     __state__ = StateService()
 
-    def get_one(self, **kwargs):
-        exc = kwargs.pop('raises', None)
+    def get_one(self, raise_on_empty=False, **kwargs):
+        obj = self.__model__.query(**kwargs).one_or_none()
 
-        try:
-            return self.__model__.query(**kwargs).one()
-        except NoResultFound:
-            if exc:
-                raise exc
+        if not obj and raise_on_empty:
+            raise NoRecordsFound
 
-            return None
+        return obj
 
-    def get_many(self, **kwargs):
-        exc = kwargs.pop('raises', None)
-        res = self.__model__.query(**kwargs).all()
-        if not res and exc:
-            raise exc
+    def get_many(self, raise_on_empty=False, **kwargs):
+        objs = self.__model__.query(**kwargs).all()
 
-        return res
+        if not objs and raise_on_empty:
+            raise NoRecordsFound
+
+        return objs
 
     def insert(self, **data):
         return self.__model__.insert(**data)
@@ -48,10 +44,12 @@ class NawanoService(object):
     def validate_address(self, address):
         return self.__state__.network.validate_address(address)
 
-    def funds_text(self, funds):
+    @staticmethod
+    def funds_text(funds):
         return '\n{0}available: {1} \n{0}pending: {2}'.format(' '*2, funds['available'], funds['pending'])
 
-    def get_highlighted(self, text):
+    @staticmethod
+    def get_highlighted(text):
         return '\n({0})'.format(text)
 
     @staticmethod
@@ -75,4 +73,3 @@ class NawanoService(object):
             table_header,
             table_body
         )
-

@@ -20,14 +20,14 @@ class Task(Thread):
         asyncio.set_event_loop(loop)
 
         try:
-            # create task:
+            # create
             self._poll_task = asyncio.ensure_future(self._poll())
 
-            # run loop:
+            # run
             loop.run_forever()
             loop.run_until_complete(loop.shutdown_asyncgens())
 
-            # cancel task:
+            # cancel
             self._poll_task.cancel()
             with suppress(asyncio.CancelledError):
                 loop.run_until_complete(self._poll_task)

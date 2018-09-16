@@ -20,4 +20,3 @@ class ConfirmValidator(Validator):
     def validate(self, document):
         if document.text != self.match:
             raise ValidationError(message='the passwords must match')
-

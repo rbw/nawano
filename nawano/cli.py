@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sys import argv, exit, hexversion, stdout
+from sys import argv, exit, stdout, version_info
 from os import path, makedirs, mknod
 from nawano.utils import stylize
 from nawano.models import meta_create_all, State
@@ -29,11 +29,11 @@ def _database_seed():
 
 
 def run():
-    if hexversion < 0x03050000:
-        exit('Nawano requires Python 3.5 or newer')
+    if version_info < (3, 5):
+        exit('error: nawano requires Python 3.5 or greater')
 
     if len(argv) > 1:
-        exit("Nawano doesn't take arguments")
+        exit("error: nawano doesn't take arguments")
 
     if not path.exists(NAWANO_HOME):
         stdout.write('\n## first-time run, installing in {0}\n'

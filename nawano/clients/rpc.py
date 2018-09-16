@@ -46,7 +46,10 @@ class RPC(object):
             return {}
 
     def get_version(self):
-        return self._request({'action': 'account_info', 'account': 'xrb_1nanode8ngaakzbck8smq6ru9bethqwyehomf79sae1k7xd47dkidjqzffeg'})
+        return self._request({
+            'action': 'account_info',
+            'account': 'xrb_1nanode8ngaakzbck8smq6ru9bethqwyehomf79sae1k7xd47dkidjqzffeg'
+        })
 
     def get_representatives(self):
         return self._request({'action': 'representatives'})

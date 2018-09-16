@@ -45,4 +45,3 @@ def config_group(attribute=None, value=None):
     else:
         attr = config_service.get(name)
         stdout.write('{0}\n\n'.format(attr.value))
-

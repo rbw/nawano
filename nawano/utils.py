@@ -80,4 +80,3 @@ def decrypt(encrypted, password):
         return privy.peek(encrypted, password)
     except ValueError:
         raise NawanoError('invalid wallet password')
-

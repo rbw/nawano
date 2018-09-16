@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from decimal import Decimal
 
 from nawano.models import Representative, ConfigAttribute
 from nawano.settings import REPRESENTATIVES_URI
@@ -35,7 +34,7 @@ class RepresentativeService(NawanoService):
                 rep['weight'] = str(rep.pop('votingweight'))[:4]
                 rep['address'] = rep.pop('account')
 
-                existing = self.__model__.query(address=rep['address']).one_or_none()
+                existing = self.get_one(address=rep['address'])
 
                 if not existing:
                     rep = Representative(**rep)
@@ -49,3 +48,5 @@ class RepresentativeService(NawanoService):
                 s.flush()
 
             s.commit()
+
+        self.__state__.wallet.cache_clear()

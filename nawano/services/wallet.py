@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from nawano.models import Wallet, Account, Representative
-from nawano.exceptions import NawanoError, NoSuchWallet
 from nawano.utils import encrypt, generate_seed, stylize
 
 from ._base import NawanoService
@@ -15,6 +14,9 @@ class WalletService(NawanoService):
         seed = generate_seed()
 
         return self.__model__.insert(name=wallet_name, seed=encrypt(seed, kwargs.pop('password')))
+
+    def get_seed(self, **kwargs):
+        return self.get_one(**kwargs, raise_on_empty=True).seed
 
     @property
     def _table_header(self):
@@ -32,23 +34,18 @@ class WalletService(NawanoService):
             ]
 
     def get_table(self, **kwargs):
-        wallets = self.get_many(**kwargs)
-        if not wallets:
-            raise NawanoError('no wallets found')
-
+        wallets = self.get_many(raise_on_empty=True, **kwargs)
         return self.get_text_table(self._table_header, self._get_table_body(wallets))
 
-    def _format_rep_details(self, rep):
+    @staticmethod
+    def _format_rep_details(rep):
         return (
             '\n{0}name: {1}\n{0}address: {2}\n{0}weight: {3}\n{0}uptime: {4:0.2f}%\n'
             .format(' '*2, rep.alias, rep.address, rep.weight, float(rep.uptime))
         )
 
     def get_details(self, **kwargs):
-        wallet = self.__model__.query(**kwargs).one_or_none()
-        if not wallet:
-            raise NoSuchWallet
-
+        wallet = self.get_one(**kwargs, raise_on_empty=True)
         funds = self.__model__.get_funds(wallet.id)
         accounts = Account.query(wallet_id=wallet.id).all()
 

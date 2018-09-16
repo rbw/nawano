@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import uuid
-
-from sqlalchemy import Column, String, DateTime, ForeignKey, ForeignKeyConstraint
+from functools import lru_cache
+from uuid import uuid4
+from sqlalchemy import Column, String, DateTime, ForeignKeyConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -37,24 +37,16 @@ class Wallet(Base, BaseMixin):
 
     @classmethod
     def insert(cls, **kwargs):
-        kwargs['id'] = str(uuid.uuid4())
+        kwargs['id'] = str(uuid4())
         cls._add(Wallet(**kwargs))
         return kwargs['id']
 
     @classmethod
+    @lru_cache()
     def get_funds(cls, wallet_id):
-        accounts = Account.query(wallet_id=wallet_id).all()
+        available, pending = [[a.available, a.pending] for a in Account.query(wallet_id=wallet_id).all()]
 
         return {
-            'available': sum([a.available for a in accounts]),
-            'pending': sum([a.pending for a in accounts])
+            'available': sum(available),
+            'pending': sum(pending)
         }
-
-    """@classmethod
-    def get_funds(cls, wallet_id):
-        accounts = cls.query(id=wallet_id).one().accounts
-
-        for a in accounts:
-            print(a)
-
-        return {(sum(a.available), sum(a.pending)) for a in accounts}"""

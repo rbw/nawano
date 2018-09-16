@@ -6,7 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from nawano.utils import from_raw
 
-from nawano.db import Base, filter_empty, get_db_session
+from nawano.db import Base, get_db_session
 from ._base import BaseMixin
 
 

@@ -7,7 +7,7 @@ from sys import stdout
 from nawano.services import wallet_service, state_service, rep_service
 from nawano.utils import password_input
 from nawano.status import with_status
-from nawano.exceptions import NoSuchWallet, NawanoError
+from nawano.exceptions import NawanoError
 from .root import root_group
 
 
@@ -83,7 +83,7 @@ def wallet_create(**kwargs):
 @wallet_group.command('use', short_help='set active wallet')
 @click.argument('name', required=True)
 def wallet_set_active(name):
-    wallet = wallet_service.get_one(name=name, raises=NoSuchWallet)
+    wallet = wallet_service.get_one(raise_on_empty=True, name=name)
     return _wallet_set_active(wallet.id)
 
 
@@ -103,3 +103,11 @@ def wallet_set_representative(address):
 def wallet_list(**kwargs):
     stdout.write(wallet_service.get_table(**kwargs))
 
+
+@wallet_group.command('dump', short_help='dump seed in plain text')
+@click.argument('name', required=True)
+def wallet_list(name):
+    wallet = wallet_service.get_one(raise_on_empty=True, name=name).seed
+    password = password_input(validate_confirm=True)
+
+    print(wallet)

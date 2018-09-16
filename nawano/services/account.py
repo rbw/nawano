@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 from nanopy.crypto import nano_account, account_nano, seed_keys
 
 from nawano.models import Account
-from nawano.exceptions import NawanoError, NoActiveWallet
-from nawano.utils import decrypt, stylize, bin2ascii
+from nawano.exceptions import NawanoError
+from nawano.utils import decrypt, bin2ascii
 
 
 from ._base import NawanoService
@@ -53,11 +52,10 @@ class AccountService(NawanoService):
                 pending_raw=str(pending_raw)
             )
 
-    def get_details(self, **kwargs):
-        account = self.get_one(wallet_id=self.__state__.wallet.id, **kwargs)
+        self.__state__.wallet_funds.cache_clear()
 
-        if not account:
-            raise NawanoError('no such account')
+    def get_details(self, **kwargs):
+        account = self.get_one(wallet_id=self.__state__.wallet.id, raise_on_empty=True, **kwargs)
 
         return self._format_output([
             self.get_header('account'),
@@ -77,7 +75,8 @@ class AccountService(NawanoService):
     def _table_header(self):
         return ['name', 'index', 'address', 'available', 'pending']
 
-    def _get_table_body(self, accounts):
+    @staticmethod
+    def _get_table_body(accounts):
         for a in accounts:
             yield [
                 a.name,

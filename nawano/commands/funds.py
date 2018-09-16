@@ -5,7 +5,7 @@ import click
 from decimal import Decimal
 from sys import stdout
 from nanopy.crypto import pow_generate, nano_account, seed_keys, sign_block
-from nawano.services import block_service, wallet_service, account_service, alias_service, state_service
+from nawano.services import block_service, account_service, alias_service, state_service
 from nawano.status import with_status
 from nawano.utils import password_input, decrypt
 from nawano.exceptions import NawanoError

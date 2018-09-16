@@ -2,7 +2,7 @@
 
 import click
 
-from prompt_toolkit.completion import Completer, Completion
+from prompt_toolkit.completion import Completer
 from .completion import NawanoCompletion
 
 

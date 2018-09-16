@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from nawano.db import Base
+from nawano import __version__
 from ._base import BaseMixin
 from .wallet import Wallet
 
@@ -12,6 +13,8 @@ class State(Base, BaseMixin):
     __tablename__ = 'state'
 
     id = Column(Integer, primary_key=True)
+
+    version = Column(String, default=__version__)
 
     wallet_id = Column(String, ForeignKey('wallet.id'))
     wallet = relationship(Wallet, foreign_keys=wallet_id)

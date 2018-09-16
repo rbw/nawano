@@ -22,7 +22,6 @@ class NoActiveWallet(NawanoError):
         return 'this operation requires an active wallet'
 
 
-class NoSuchWallet(NawanoError):
+class NoRecordsFound(NawanoError):
     def __str__(self, *args, **kwargs):
-        return 'no wallet by that name'
-
+        return 'no matches found'

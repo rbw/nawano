@@ -9,6 +9,6 @@ from .alias import Alias
 from .rep import Representative
 from .state import State
 
+
 def meta_create_all():
     Base.metadata.create_all(engine)
-

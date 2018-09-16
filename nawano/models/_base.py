@@ -26,4 +26,3 @@ class BaseMixin(object):
         with get_db_session() as s:
             s.add(instance)
             s.commit()
-

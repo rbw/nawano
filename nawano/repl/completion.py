@@ -119,7 +119,8 @@ class NawanoCompletion(object):
 
             yield opt, None, param.help
 
-    def _get_arguments(self, param):
+    @staticmethod
+    def _get_arguments(param):
         for opt in param.type.choices:
             yield opt, None, None
 
@@ -128,7 +129,8 @@ class NawanoCompletion(object):
             cmd = command.get_command(self._ctx, c)
             yield cmd.name, None, cmd.short_help
 
-    def _suggest_from_objs(self, objs, text_key='name', meta_key=None, display_key=None):
+    @staticmethod
+    def _suggest_from_objs(objs, text_key='name', meta_key=None, display_key=None):
         for obj in objs:
             meta = str(getattr(obj, meta_key)) if meta_key else None
             display = getattr(obj, display_key) if display_key else None
@@ -160,5 +162,3 @@ class NawanoCompletion(object):
             start = -len(query) if text else -1
 
             yield Completion(text, start, display_meta=meta, display=display)
-
-

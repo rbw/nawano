@@ -38,7 +38,7 @@ PW_MESSAGE_INFO = [
 
 DEFAULT_CORE_SETTINGS = [
     {
-        'name': 'announce_cooldown',
+        'name': 'notify_cooldown',
         'value': '30',
         'description': 'notification cooldown',
         'type': 'int'

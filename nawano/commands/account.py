@@ -19,7 +19,7 @@ def _account_create(**kwargs):
 
 def _validate_account_name(ctx, param, value):
     if state_service.get_accounts(name=value):
-        raise NawanoError('an account with this name already exists')
+        raise NawanoError('an account with that name already exists')
 
     return account_service.validate_name(value)
 

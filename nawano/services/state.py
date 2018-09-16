@@ -6,7 +6,7 @@ from nanopy.crypto import account_nano
 
 from nawano.clients import RPC
 from nawano.models import ConfigAttribute, Account, State, Wallet
-from nawano.exceptions import NoSuchWallet, NoActiveWallet
+from nawano.exceptions import NoRecordsFound, NoActiveWallet
 
 
 class StateService(object):
@@ -14,33 +14,35 @@ class StateService(object):
     def _state(self):
         return State.query().first()
 
-    @property
-    def wallet(self):
+    @lru_cache()
+    def __get_active_wallet(self):
         wallet = State.get_wallet()
         if not wallet:
             raise NoActiveWallet
 
         return wallet
 
+    @property
+    def wallet(self):
+        return self.__get_active_wallet()
+
     def set_wallet(self, wallet_id):
         wallet = Wallet.query(id=wallet_id).one_or_none()
 
         if not wallet:
-            raise NoSuchWallet
+            raise NoRecordsFound
 
         State.set(wallet_id=wallet.id)
+        self.__get_active_wallet.cache_clear()
 
     @property
+    @lru_cache()
     def wallet_funds(self):
         return self.wallet.get_funds(self.wallet.id)
 
     @property
     def network(self):
         return RPC(ConfigAttribute.get_one('backend').value)
-
-    @property
-    def funds(self):
-        return self.wallet.get_funds(self.wallet.id)
 
     def get_accounts(self, **kwargs):
         return Account.query(wallet_id=self.wallet.id, **kwargs).all()

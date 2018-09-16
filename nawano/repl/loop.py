@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import stdout
-from datetime import datetime, timedelta
+from datetime import datetime
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 
@@ -62,23 +62,31 @@ def get_bottom_toolbar():
     except NoActiveWallet:
         return None
 
-    pending_class = 'class:bottom-toolbar-pending' if state_service.wallet_funds['pending'] > 0 else 'class:bottom-toolbar-value'
+    pending_class = (
+        'class:bottom-toolbar-pending'
+        if
+        state_service.wallet_funds['pending'] > 0
+        else
+        'class:bottom-toolbar-value'
+    )
+
+    funds = state_service.wallet_funds
 
     return [
         ('class:bottom-toolbar-logo', ' ⩫ '),
         ('class:bottom-toolbar-key', 'wallet:'),
         ('class:bottom-toolbar-value', '{0}'.format(wallet.name)),
         ('class:bottom-toolbar-key', ' · available:'),
-        ('class:bottom-toolbar-value', '{0}'.format(state_service.wallet_funds['available'])),
+        ('class:bottom-toolbar-value', '{0}'.format(funds['available'])),
         ('class:bottom-toolbar-key', ' · pending:'),
-        (pending_class, '{0}'.format(state_service.wallet_funds['pending'])),
+        (pending_class, '{0}'.format(funds['pending'])),
     ]
 
 
 def nawano_loop(ctx):
     session = PromptSession(
         completer=completer.NawanoCompleter(ctx),
-        refresh_interval=1,
+        refresh_interval=2,
         color_depth=PROMPT_COLOR_DEPTH,
         history=FileHistory(HISTORY_PATH),
         style=PROMPT_STYLE,
@@ -86,7 +94,7 @@ def nawano_loop(ctx):
 
     while True:
         try:
-            cooldown_secs = config_service.get('announce_cooldown').value
+            cooldown_secs = config_service.get('notify_cooldown').value
             weight_announce(cooldown_secs)
             pending_announce(cooldown_secs)
 
