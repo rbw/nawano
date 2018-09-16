@@ -38,11 +38,6 @@ class AccountService(NawanoService):
         return account_pk
 
     def refresh_balances(self):
-        try:
-            self.__state__.syncing = True
-        except NoActiveWallet:
-            return
-
         for address, pending in self.__state__.pending_blocks:
             account = self.__state__.network.get_account(address)
             available_raw = account['balance'] if account else 0
@@ -52,17 +47,11 @@ class AccountService(NawanoService):
                 for block in pending.values():
                     pending_raw += int(block['amount'])
 
-            self.update_funds(
+            self.__model__.update(
                 nano_account(address),
                 available_raw=str(available_raw),
                 pending_raw=str(pending_raw)
             )
-
-        self.__state__.syncing = False
-
-    def update_funds(self, public_key, **kwargs):
-        self.__model__.update(public_key, **kwargs)
-        self.__state__.synced_on = datetime.now().replace(microsecond=0)
 
     def get_details(self, **kwargs):
         account = self.get_one(wallet_id=self.__state__.wallet.id, **kwargs)
@@ -74,7 +63,7 @@ class AccountService(NawanoService):
             self.get_header('account'),
             'index: ' + str(account.idx),
             'name: ' + account.name,
-            'created_on: ' + str(account.created_on),
+            'updated: ' + str(account.updated_on),
             'address: ' + account_nano(account.public_key),
             'public_key: ' + account.public_key.upper(),
             self.get_highlighted('funds') + self.funds_text({
