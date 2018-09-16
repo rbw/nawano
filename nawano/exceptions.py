@@ -5,7 +5,7 @@ class NawanoError(Exception):
     pass
 
 
-class RepresentativeTooHeavy(Exception):
+class ValidationError(NawanoError):
     pass
 
 
@@ -25,12 +25,4 @@ class NoActiveWallet(NawanoError):
 class NoSuchWallet(NawanoError):
     def __str__(self, *args, **kwargs):
         return 'no wallet by that name'
-
-
-class SyncAlreadyRunning(NawanoError):
-    pass
-
-
-class ValidationError(NawanoError):
-    pass
 
