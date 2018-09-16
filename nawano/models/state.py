@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, String, Integer, DateTime, Boolean, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from nawano.db import Base
@@ -12,12 +12,12 @@ class State(Base, BaseMixin):
     __tablename__ = 'state'
 
     id = Column(Integer, primary_key=True)
+
     wallet_id = Column(String, ForeignKey('wallet.id'))
     wallet = relationship(Wallet, foreign_keys=wallet_id)
-    backend = Column(String, default='https://getcanoe.io/rpc')
-    is_syncing = Column(Boolean, default=False, nullable=False)
-    last_synced_on = Column(DateTime, default=BaseMixin.big_bang, nullable=False)
-    pending_announced_on = Column(DateTime, default=BaseMixin.big_bang, nullable=False)
+
+    pending_announced = Column(DateTime, default=BaseMixin.big_bang, nullable=False)
+    weight_announced = Column(DateTime, default=BaseMixin.big_bang, nullable=False)
 
     @classmethod
     def install(cls):
@@ -25,7 +25,6 @@ class State(Base, BaseMixin):
 
     @classmethod
     def get_wallet(cls):
-        # return cls.query(State.wallet)
         return cls.query().first().wallet
 
     @classmethod
