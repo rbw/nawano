@@ -17,6 +17,12 @@ def _pow_generate(data):
     return pow_generate(data)
 
 
+@with_status(text='refreshing balances')
+def _refresh_balances():
+    account_service.refresh_balances()
+    return None, None
+
+
 def _validate_send(payload):
     account_from = account_service.get_one(name=payload['account_from'], wallet_id=state_service.wallet.id)
     recipient_alias = alias_service.get_one(name=payload['recipient_alias'])
@@ -62,6 +68,11 @@ def funds_group():
         raise NawanoError('this operation requires an account')
     elif not state_service.wallet.representative_address:
         raise NawanoError('this operation requires a wallet representative')
+
+
+@funds_group.command('refresh', short_help='refresh balances now')
+def wallet_list():
+    _refresh_balances()
 
 
 @funds_group.command('send', short_help='send funds')
