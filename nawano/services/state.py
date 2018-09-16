@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from functools import lru_cache
 from datetime import datetime
 from nanopy.crypto import account_nano
 
 from nawano.clients import RPC
 from nawano.models import ConfigAttribute, Account, State, Wallet
-from nawano.exceptions import NoSuchWallet, NoActiveWallet, SyncAlreadyRunning
+from nawano.exceptions import NoSuchWallet, NoActiveWallet
 
 
 class StateService(object):
@@ -21,14 +22,6 @@ class StateService(object):
 
         return wallet
 
-    @property
-    def wallet_funds(self):
-        return self.wallet.get_funds(self.wallet.id)
-
-    @property
-    def network(self):
-        return RPC(ConfigAttribute.get_one('backend').value)
-
     def set_wallet(self, wallet_id):
         wallet = Wallet.query(id=wallet_id).one_or_none()
 
@@ -36,6 +29,14 @@ class StateService(object):
             raise NoSuchWallet
 
         State.set(wallet_id=wallet.id)
+
+    @property
+    def wallet_funds(self):
+        return self.wallet.get_funds(self.wallet.id)
+
+    @property
+    def network(self):
+        return RPC(ConfigAttribute.get_one('backend').value)
 
     @property
     def funds(self):
@@ -47,11 +48,13 @@ class StateService(object):
     def _as_announced(self, name):
         return '{0}_{1}'.format(name, 'announced')
 
-    def set_announced(self, name):
-        State.set(**{name + '_announced': datetime.now().replace(microsecond=0)})
-
+    @lru_cache()
     def get_announced(self, name):
         return getattr(self._state, self._as_announced(name))
+
+    def set_announced(self, name):
+        State.set(**{name + '_announced': datetime.now().replace(microsecond=0)})
+        self.get_announced.cache_clear()
 
     @property
     def pending_blocks(self):

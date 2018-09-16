@@ -65,7 +65,7 @@ class AccountService(NawanoService):
             'name: ' + account.name,
             'updated: ' + str(account.updated_on),
             'address: ' + account_nano(account.public_key),
-            'public_key: ' + account.public_key.upper(),
+            'pubkey: ' + account.public_key.upper(),
             self.get_highlighted('funds') + self.funds_text({
                 'available': account.available,
                 'pending': account.pending,
