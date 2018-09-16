@@ -24,4 +24,4 @@ class NoActiveWallet(NawanoError):
 
 class NoRecordsFound(NawanoError):
     def __str__(self, *args, **kwargs):
-        return 'no matches found'
+        return 'no such object'

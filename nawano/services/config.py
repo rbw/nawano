@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from functools import lru_cache
+
 from nawano.models import ConfigAttribute
 from nawano.exceptions import NawanoError
 
@@ -32,6 +34,7 @@ class ConfigService(NawanoService):
                 c.description
             ]
 
+    @lru_cache()
     def get(self, key):
         attr = self.__model__.get_one(key)
         if not attr:
@@ -48,3 +51,4 @@ class ConfigService(NawanoService):
             raise NawanoError('unrecognized type provided for {0}'.format(attr.name))
 
         self.__model__.update(name=key, value=value)
+        self.get.cache_clear()

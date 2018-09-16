@@ -23,11 +23,11 @@ class WalletService(NawanoService):
         return ['name', 'accounts', 'available', 'pending']
 
     def _get_table_body(self, wallets):
-        for w in wallets:
-            accounts = Account.query(wallet_id=w.id).all()
-            funds = self.__model__.get_funds(w.id)
+        for wallet in wallets:
+            accounts = Account.query(wallet_id=wallet.id).all()
+            funds = self.__state__.get_wallet_funds(wallet.id)
             yield [
-                w.name,
+                wallet.name,
                 len(accounts),
                 funds['available'],
                 funds['pending']
@@ -46,7 +46,7 @@ class WalletService(NawanoService):
 
     def get_details(self, **kwargs):
         wallet = self.get_one(**kwargs, raise_on_empty=True)
-        funds = self.__model__.get_funds(wallet.id)
+        funds = self.__state__.get_wallet_funds(wallet.id)
         accounts = Account.query(wallet_id=wallet.id).all()
 
         if not wallet.representative_address:

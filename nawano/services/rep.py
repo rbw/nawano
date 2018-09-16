@@ -24,6 +24,7 @@ class RepresentativeService(NawanoService):
         )
 
     def refresh_reps(self):
+        # @TODO - look into bulk upserts with SQA
         representatives = requests.get(REPRESENTATIVES_URI).json()
 
         with get_db_session() as s:
@@ -49,4 +50,4 @@ class RepresentativeService(NawanoService):
 
             s.commit()
 
-        self.__state__.wallet.cache_clear()
+        self.__state__.get_active_wallet.cache_clear()
