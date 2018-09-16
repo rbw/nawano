@@ -19,7 +19,7 @@ class Wallet(Base, BaseMixin):
     id = Column(String, primary_key=True, nullable=False)
     name = Column(String, unique=True, nullable=False)
     seed = Column(String, nullable=False)
-    created_on = Column(DateTime, default=func.now(), nullable=False)
+    updated_on = Column(DateTime, default=func.now(), onupdate=func.now())
 
     representative_address = Column(String)
     representative_alias = Column(String)

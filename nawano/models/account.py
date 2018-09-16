@@ -19,7 +19,7 @@ class Account(Base, BaseMixin):
     public_key = Column(String, unique=True)
     available_raw = Column(Integer, nullable=False, default=0)
     pending_raw = Column(Integer, nullable=False, default=0)
-    created_on = Column(DateTime, default=func.now())
+    updated_on = Column(DateTime, default=func.now(), onupdate=func.now())
 
     UniqueConstraint(wallet_id, name, name='uc_wallet_account_name')
 

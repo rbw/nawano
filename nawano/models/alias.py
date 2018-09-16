@@ -12,8 +12,8 @@ class Alias(Base, BaseMixin):
 
     address = Column(String, nullable=False, primary_key=True)
     name = Column(String, nullable=False, unique=True)
-    description = Column(String, nullable=False)
-    created_on = Column(DateTime, default=func.now())
+    description = Column(String, nullable=True)
+    updated_on = Column(DateTime, default=func.now(), onupdate=func.now())
 
     @classmethod
     def update(cls, public_key, **kwargs):
