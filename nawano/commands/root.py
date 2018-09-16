@@ -39,7 +39,7 @@ def root_group(ctx):
         tasks = tasks_start(
             [
                 [account_service.refresh_balances, get_cfg('balance_refresh')],
-                [rep_service.refresh_reps, get_cfg('reps_refresh')]
+                [rep_service.refresh_reps, get_cfg('reps_refresh') * 60]
             ]
         )
 
