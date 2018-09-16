@@ -51,7 +51,7 @@ def alias_group():
 @alias_group.command('create', short_help='create alias')
 @click.option('--name', 'name', help='alias name', callback=_validate_name, required=True)
 @click.option('--address', 'address', help='alias address', callback=_validate_address_light, required=True)
-@click.option('--description', 'description', help='alias description', required=True)
+@click.option('--description', 'description', help='alias description', required=False)
 def alias_create(**kwargs):
     _validate_address(kwargs.get('address'))
     _alias_create(**kwargs)
