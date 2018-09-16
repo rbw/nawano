@@ -8,7 +8,7 @@ class BaseMixin(object):
     big_bang = datetime.fromtimestamp(-2147483648)
 
     @classmethod
-    def query(cls, *entities, **kwargs):
+    def _query(cls, *entities, **kwargs):
         with get_db_session() as s:
             return s.query(entities or cls).filter_by(**filter_empty(kwargs))
 

@@ -15,6 +15,10 @@ class ConfigAttribute(Base, BaseMixin):
     type = Column(String)
 
     @classmethod
+    def query(cls, **kwargs):
+        return cls._query(**kwargs)
+
+    @classmethod
     def update(cls, name, **kwargs):
         existing = cls.query(name=name).one()
         return cls._update(existing, value=kwargs['value'])

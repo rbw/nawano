@@ -16,3 +16,7 @@ class Representative(Base, BaseMixin):
     delegators = Column(Integer, nullable=False)
     weight = Column(Float, nullable=False)
     updated_on = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
+
+    @classmethod
+    def query(cls, **kwargs):
+        return cls._query(**kwargs)

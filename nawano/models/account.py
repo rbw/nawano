@@ -39,6 +39,10 @@ class Account(Base, BaseMixin):
         return 0 if curr_idx is None else curr_idx + 1
 
     @classmethod
+    def query(cls, **kwargs):
+        return cls._query(**kwargs)
+
+    @classmethod
     def update(cls, public_key, **kwargs):
         existing = cls.query(public_key=public_key).one()
         return cls._update(existing, **kwargs)

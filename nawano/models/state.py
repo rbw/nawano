@@ -23,6 +23,10 @@ class State(Base, BaseMixin):
     weight_announced = Column(DateTime, default=BaseMixin.big_bang, nullable=False)
 
     @classmethod
+    def query(cls, **kwargs):
+        return cls._query(**kwargs)
+
+    @classmethod
     def install(cls):
         return cls._add(State(id=1))
 

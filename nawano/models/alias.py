@@ -16,6 +16,10 @@ class Alias(Base, BaseMixin):
     updated_on = Column(DateTime, default=func.now(), onupdate=func.now())
 
     @classmethod
+    def query(cls, **kwargs):
+        return cls._query(**kwargs)
+
+    @classmethod
     def update(cls, public_key, **kwargs):
         existing = cls.query(public_key=public_key).one()
         return cls._update(existing, **kwargs)
