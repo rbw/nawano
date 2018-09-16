@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from nanopy.crypto import account_nano
 
 from nawano.clients import RPC
@@ -43,32 +44,14 @@ class StateService(object):
     def get_accounts(self, **kwargs):
         return Account.query(wallet_id=self.wallet.id, **kwargs).all()
 
-    @property
-    def syncing(self):
-        return State.is_syncing
+    def _as_announced(self, name):
+        return '{0}_{1}'.format(name, 'announced')
 
-    @syncing.setter
-    def syncing(self, new_state):
-        if new_state is True and self.syncing is True:
-            raise SyncAlreadyRunning
+    def set_announced(self, name):
+        State.set(**{name + '_announced': datetime.now().replace(microsecond=0)})
 
-        State.set(is_syncing=new_state)
-
-    @property
-    def synced_on(self):
-        return self._state.last_synced_on
-
-    @synced_on.setter
-    def synced_on(self, value):
-        State.set(last_synced_on=value)
-
-    @property
-    def pending_announced(self):
-        return self._state.pending_announced_on
-
-    @pending_announced.setter
-    def pending_announced(self, value):
-        State.set(pending_announced_on=value)
+    def get_announced(self, name):
+        return getattr(self._state, self._as_announced(name))
 
     @property
     def pending_blocks(self):
