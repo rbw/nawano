@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import click
 from sys import stdout
 from requests.exceptions import RequestException
@@ -37,8 +38,8 @@ def config_group(attribute=None, value=None):
         stdout.write(config_service.table)
     elif name and value:
         if name == 'backend':
+            value = re.sub(r'https?://', '', value)
             _test_backend(value)
-            name = 'backend'
 
         _config_attribute_set(name, value)
     else:

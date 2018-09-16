@@ -9,7 +9,7 @@ from nawano.exceptions import UnexpectedBackendResponse
 
 class RPC(object):
     def __init__(self, uri):
-        self._uri = uri
+        self._uri = 'https://' + uri
         self._session = requests.session()
 
     def _request(self, payload):
