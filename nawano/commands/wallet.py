@@ -4,7 +4,7 @@ import click
 from prompt_toolkit import prompt
 from sys import stdout
 
-from nawano.services import wallet_service, state_service, rep_service
+from nawano.services import wallet_service, state_service, rep_service, account_service
 from nawano.utils import password_input
 from nawano.status import with_status
 from nawano.exceptions import NoSuchWallet, NawanoError
@@ -16,6 +16,12 @@ def _wallet_set_active(wallet_id):
     state_service.set_wallet(wallet_id)
     msg = 'active wallet: {0}'.format(state_service.wallet.name)
     return None, msg
+
+
+@with_status(text='refreshing balances')
+def _refresh_balances():
+    account_service.refresh_balances()
+    return None, None
 
 
 @with_status(text='setting representative')
@@ -102,4 +108,9 @@ def wallet_set_representative(address):
 @wallet_group.command('list', short_help='wallet list')
 def wallet_list(**kwargs):
     stdout.write(wallet_service.get_table(**kwargs))
+
+
+@wallet_group.command('refresh', short_help='refresh wallet balances')
+def wallet_list():
+    _refresh_balances()
 
