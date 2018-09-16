@@ -8,35 +8,6 @@ from nawano.repl.loop import nawano_loop
 from nawano.utils import stylize
 from nawano.services import config_service, account_service, rep_service, state_service
 from nawano.task import Task
-from nawano.exceptions import NoActiveWallet
-
-
-def pending_notify():
-    try:
-        funds = state_service.wallet_funds
-    except NoActiveWallet:
-        return
-
-    if funds['pending'] > 0:
-        stdout.write('\n- there are pending funds, use {0} to claim now.\n'.format(
-            stylize('funds pull', color='yellow')
-        ))
-
-
-def weight_notify():
-    try:
-        representative = state_service.wallet.representative
-        if not representative or not representative.weight:
-            return
-    except NoActiveWallet:
-        return
-
-    max_weight = config_service.get('max_weight').value
-
-    if representative.weight > max_weight:
-        stdout.write('\ninfo: your representative has too much weight, use {0} to change\n'.format(
-            stylize('wallet representative', color='yellow')
-        ))
 
 
 def tasks_start(tasks_args):
@@ -68,9 +39,7 @@ def root_group(ctx):
         tasks = tasks_start(
             [
                 [account_service.refresh_balances, get_cfg('balance_refresh')],
-                [rep_service.refresh_reps, get_cfg('reps_refresh')],
-                [pending_notify, get_cfg('pending_check')],
-                [weight_notify, get_cfg('weight_check')]
+                [rep_service.refresh_reps, get_cfg('reps_refresh')]
             ]
         )
 

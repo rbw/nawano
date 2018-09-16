@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from sys import stdout
+from datetime import datetime, timedelta
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 
 from click.exceptions import UsageError
 from nawano.exceptions import NawanoError, NoActiveWallet
 
-from nawano.services import state_service
+from nawano.services import state_service, config_service
 from nawano.settings import PROMPT_COLOR_DEPTH, HISTORY_PATH, PROMPT_STYLE
 from nawano.utils import stylize
 from nawano.repl import completion, completer
@@ -18,6 +19,41 @@ def get_styled_prompt():
         ('class:prompt-name', 'nawano'),
         ('class:prompt-marker', u'> '),
     ]
+
+
+def pending_announce(cooldown_secs):
+    try:
+        funds = state_service.wallet_funds
+    except NoActiveWallet:
+        return
+
+    announced_secs_ago = (datetime.now() - state_service.get_announced('pending')).seconds
+
+    if funds['pending'] > 0 and announced_secs_ago > cooldown_secs:
+        stdout.write('info: there are pending funds, use {0} to claim now.\n'.format(
+            stylize('funds pull', color='yellow')
+        ))
+
+        state_service.set_announced('pending')
+
+
+def weight_announce(cooldown_secs):
+    try:
+        representative = state_service.wallet.representative
+        if not representative or not representative.weight:
+            return
+    except NoActiveWallet:
+        return
+
+    max_weight = config_service.get('max_weight').value
+    announced_secs_ago = (datetime.now() - state_service.get_announced('weight')).seconds
+
+    if representative.weight > max_weight and announced_secs_ago > cooldown_secs:
+        stdout.write('info: your representative has too much weight, use {0} to change\n'.format(
+            stylize('wallet representative', color='yellow')
+        ))
+
+        state_service.set_announced('weight')
 
 
 def get_bottom_toolbar():
@@ -50,6 +86,10 @@ def nawano_loop(ctx):
 
     while True:
         try:
+            cooldown_secs = config_service.get('announce_cooldown').value
+            weight_announce(cooldown_secs)
+            pending_announce(cooldown_secs)
+
             cmd_str = session.prompt(get_styled_prompt(), bottom_toolbar=get_bottom_toolbar)
 
             if not cmd_str:
