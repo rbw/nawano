@@ -28,8 +28,11 @@ class NawanoService(object):
     def insert(self, **data):
         return self.__model__.insert(**data)
 
-    def update(self, idx, **data):
-        return self.__model__.update(idx, **data)
+    def update(self, _id, **data):
+        return self.__model__.update(_id, **data)
+
+    def delete(self, **kwargs):
+        return self.__model__.delete(**kwargs)
 
     @staticmethod
     def validate_name(name, argument_name='name'):
