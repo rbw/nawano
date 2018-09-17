@@ -5,7 +5,7 @@ from prompt_toolkit import prompt
 from sys import stdout
 
 from nawano.services import wallet_service, state_service, rep_service
-from nawano.utils import password_input
+from nawano.utils import password_input, decrypt, stylize
 from nawano.status import with_status
 from nawano.exceptions import NawanoError
 from .root import root_group
@@ -15,6 +15,13 @@ from .root import root_group
 def _wallet_set_active(wallet_id):
     state_service.set_wallet(wallet_id)
     msg = 'active wallet: {0}'.format(state_service.wallet.name)
+    return None, msg
+
+
+@with_status(text='decrypting seed')
+def _dump_seed(seed_encrypted, password):
+    seed = decrypt(seed_encrypted, password).decode('ascii')
+    msg = seed
     return None, msg
 
 
@@ -106,8 +113,11 @@ def wallet_list(**kwargs):
 
 @wallet_group.command('dump', short_help='dump seed in plain text')
 @click.argument('name', required=True)
-def wallet_list(name):
-    wallet = wallet_service.get_one(raise_on_empty=True, name=name).seed
-    password = password_input(validate_confirm=True)
-
-    print(wallet)
+def wallet_dump_seed(name):
+    stdout.write(
+        '\n[{0}] the seed can be used to access your funds; store it securely!\n\n'
+        'enter your wallet password to proceed.\n'.format(stylize('WARNING', color='yellow', bold=True))
+    )
+    password = password_input(validate_confirm=False)
+    seed = wallet_service.get_one(raise_on_empty=True, name=name).seed
+    return _dump_seed(seed, password)
