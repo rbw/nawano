@@ -15,6 +15,14 @@ def _alias_create(**kwargs):
     return address, msg
 
 
+@with_status(text='deleting alias')
+def _alias_delete(**kwargs):
+    alias = alias_service.get_one(raise_on_empty=True, **kwargs)
+    alias_service.delete(**kwargs)
+    msg = 'deleted: {0}/{1}'.format(alias.name, alias.address)
+    return None, msg
+
+
 @with_status(text='validating address')
 def _validate_address(address):
     if not alias_service.validate_address(address):
@@ -58,15 +66,18 @@ def alias_create(**kwargs):
 
 
 @alias_group.command('show', short_help='show alias details')
-@click.option('--name', 'name', help='by name')
-@click.option('--address', 'address', help='by address')
+# @click.option('--name', 'name', help='by name')
+# @click.option('--address', 'address', help='by address')
+@click.argument('name', required=True)
 def alias_show(**kwargs):
     stdout.write(alias_service.get_details(**kwargs))
 
 
 @alias_group.command('delete', short_help='delete alias')
+@click.argument('name', required=True)
 def alias_delete(**kwargs):
-    stdout.write(alias_service.get_one(**kwargs))
+    # stdout.write(alias_service.get_one(**kwargs))
+    return _alias_delete(**kwargs)
 
 
 @alias_group.command('list', short_help='list aliases')
