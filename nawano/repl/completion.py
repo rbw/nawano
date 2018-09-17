@@ -55,7 +55,10 @@ class NawanoCompletion(object):
 
     @property
     def req_aliases(self):
-        if self._args[:2] == ['alias', 'show'] and self._args[-1] == '--name':
+        if len(self._args) < 2:
+            return False
+
+        if self._args[0] == 'alias' and self._args[1] in ['show', 'delete']:
             return True
         elif self._args[:2] == ['funds', 'send'] and self._args[-1] == '--recipient_alias':
             return True
