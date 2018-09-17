@@ -13,16 +13,23 @@ class BaseMixin(object):
             return s.query(entities or cls).filter_by(**filter_empty(kwargs))
 
     @classmethod
-    def _update(cls, instance, **kwargs):
+    def _update(cls, obj, **kwargs):
         with get_db_session() as s:
             for k, v in kwargs.items():
-                setattr(instance, k, v)
+                setattr(obj, k, v)
 
-            s.merge(instance)
+            s.merge(obj)
             s.commit()
 
     @classmethod
-    def _add(cls, instance):
+    def delete(cls, **kwargs):
         with get_db_session() as s:
-            s.add(instance)
+            obj = s.query(cls).filter_by(**filter_empty(kwargs)).one()
+            s.delete(obj)
+            s.commit()
+
+    @classmethod
+    def _add(cls, obj):
+        with get_db_session() as s:
+            s.add(obj)
             s.commit()
