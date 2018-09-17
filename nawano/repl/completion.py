@@ -44,11 +44,14 @@ class NawanoCompletion(object):
         if len(self._args) != 2:
             return False
 
-        return self._args[0] == 'wallet' and self._args[1] in ['use', 'show']
+        return self._args[0] == 'wallet' and self._args[1] in ['use', 'show', 'dump']
 
     @property
     def req_accounts(self):
-        return self._args[:2] == ['account', 'show'] and self._args[-1] == '--name'
+        if len(self._args) != 2:
+            return False
+
+        return self._args[0] == 'account' and self._args[1] in ['show', 'delete']
 
     @property
     def req_aliases(self):
