@@ -15,9 +15,6 @@ class WalletService(NawanoService):
 
         return self.__model__.insert(name=wallet_name, seed=encrypt(seed, kwargs.pop('password')))
 
-    def get_seed(self, **kwargs):
-        return self.get_one(**kwargs, raise_on_empty=True).seed
-
     @property
     def _table_header(self):
         return ['name', 'accounts', 'available', 'pending']
