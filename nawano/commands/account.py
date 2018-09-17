@@ -17,6 +17,14 @@ def _account_create(**kwargs):
     return public_key, msg
 
 
+@with_status(text='deleting account')
+def _account_delete(**kwargs):
+    account = account_service.get_one(raise_on_empty=True, **kwargs)
+    account_service.delete(**kwargs)
+    msg = 'deleted: {0}/{1}'.format(account.name, account_nano(account.public_key))
+    return None, msg
+
+
 def _validate_account_name(ctx, param, value):
     if state_service.get_accounts(name=value):
         raise NawanoError('an account with that name already exists')
@@ -50,21 +58,21 @@ def account_create(**kwargs):
 
 
 @account_group.command('show', short_help='show wallet details')
-@click.option('--name', 'name', help='account name', required=False)
-@click.option('--address', 'address', help='account address', required=False)
-@click.option('--index', 'idx', help='account index', required=False)
+# @click.option('--name', 'name', help='account name', required=False)
+# @click.option('--address', 'address', help='account address', required=False)
+# @click.option('--index', 'idx', help='account index', required=False)
+@click.argument('name', required=True)
 def account_show(**kwargs):
-    if not any([kwargs['name'], kwargs['address'], kwargs['idx']]):
-        raise NawanoError('you must provide name, address or index')
-
-    kwargs['public_key'] = nano_account(kwargs.pop('address')) if kwargs['address'] else None
+    # if not any([kwargs['name'], kwargs['address'], kwargs['idx']]):
+    #     raise NawanoError('you must provide name, address or index')
+    # kwargs['public_key'] = nano_account(kwargs.pop('address')) if kwargs['address'] else None
     stdout.write(account_service.get_details(**kwargs))
 
 
 @account_group.command('delete', short_help='delete account')
-@click.option('--name', required=True)
+@click.argument('name', required=True)
 def account_delete(**kwargs):
-    stdout.write(account_service.get_one(**kwargs))
+    return _account_delete(**kwargs)
 
 
 @account_group.command('list', short_help='list accounts')
