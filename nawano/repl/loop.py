@@ -75,7 +75,7 @@ def get_bottom_toolbar():
     funds = state_service.wallet_funds
 
     return [
-        ('class:bottom-toolbar-logo', ' ⩫ '),
+        ('class:bottom-toolbar-logo', ' ␥ '),
         ('class:bottom-toolbar-key', 'wallet:'),
         ('class:bottom-toolbar-value', '{0}'.format(wallet.name)),
         ('class:bottom-toolbar-key', ' · available:'),

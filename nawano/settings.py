@@ -26,7 +26,7 @@ PROMPT_STYLE = Style([
     ('bottom-toolbar-key', 'bg:ansigray'),
     ('bottom-toolbar-value', 'bg:ansiwhite'),
     ('bottom-toolbar-pending', 'bg:ansiyellow'),
-    ('bottom-toolbar-logo', 'bg:ansigreen'),
+    ('bottom-toolbar-logo', 'bg:ansipurple bold'),
     ('bottom-toolbar', 'fg:ansiblack bg:ansiwhite'),
 ])
 
@@ -63,7 +63,7 @@ DEFAULT_CORE_SETTINGS = [
     },
     {
         'name': 'backend',
-        'value': 'getcanoe.io/rpc',
+        'value': 'https://getcanoe.io/rpc',
         'description': 'node network relay',
         'type': 'str'
     },
