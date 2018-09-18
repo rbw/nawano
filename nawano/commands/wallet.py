@@ -36,11 +36,11 @@ def _wallet_set_representative(address):
     }
 
     rep = rep_service.get_one(address=address)
+
     wr['representative_alias'] = rep.alias if rep else None
     wallet_service.update(wallet_id, **wr)
 
-    msg = 'representative: {0}'.format(state_service.wallet.representative_address)
-    return None, msg
+    return None, None
 
 
 @with_status(text='creating wallet')
