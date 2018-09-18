@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from functools import lru_cache
 from uuid import uuid4
 from sqlalchemy import Column, String, DateTime, ForeignKeyConstraint
 from sqlalchemy.sql import func
@@ -22,7 +21,7 @@ class Wallet(Base, BaseMixin):
 
     representative_address = Column(String)
     representative_alias = Column(String)
-    representative = relationship(Representative, lazy=False)
+    representative = relationship(Representative)
 
     ForeignKeyConstraint(
         (representative_address, representative_alias),
@@ -30,7 +29,6 @@ class Wallet(Base, BaseMixin):
     ),
 
     @classmethod
-    @lru_cache()
     def query(cls, **kwargs):
         return cls._query(**kwargs)
 
@@ -38,7 +36,6 @@ class Wallet(Base, BaseMixin):
     def update(cls, wallet_id, **kwargs):
         wallet = cls.query(id=wallet_id).one()
         res = cls._update(wallet, **kwargs)
-        cls.query.cache_clear()
         return res
 
     @classmethod
