@@ -9,7 +9,7 @@ from nawano.exceptions import UnexpectedBackendResponse
 
 class RPC(object):
     def __init__(self, uri):
-        self._uri = 'https://' + uri
+        self._uri = uri
         self._session = requests.session()
 
     def _request(self, payload):
@@ -45,11 +45,8 @@ class RPC(object):
 
             return {}
 
-    def get_version(self):
-        return self._request({
-            'action': 'account_info',
-            'account': 'xrb_1nanode8ngaakzbck8smq6ru9bethqwyehomf79sae1k7xd47dkidjqzffeg'
-        })
+    def get_supply(self):
+        return self._request({'action': 'available_supply'})
 
     def get_representatives(self):
         return self._request({'action': 'representatives'})

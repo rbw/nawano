@@ -16,7 +16,7 @@ from .root import root_group
 def _test_backend(uri):
     try:
         client = RPC(uri)
-        client.get_version()
+        client.get_supply()
     except RequestException as e:
         raise NawanoError(e)
 
@@ -38,7 +38,7 @@ def config_group(attribute=None, value=None):
         stdout.write(config_service.table)
     elif name and value:
         if name == 'backend':
-            value = re.sub(r'https?://', '', value)
+            # value = re.sub(r'https?://', '', value)
             _test_backend(value)
 
         _config_attribute_set(name, value)
