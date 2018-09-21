@@ -55,4 +55,4 @@ class RepresentativeService(NawanoService):
 
             s.commit()
 
-        self.__state__.get_active_wallet.cache_clear()
+        # self.__state__.get_active_wallet.cache_clear()

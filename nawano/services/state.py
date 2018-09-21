@@ -15,11 +15,10 @@ class StateService(object):
     def _state(self):
         return State.query().first()
 
-    @lru_cache()
     def get_announced(self, name):
         return getattr(self._state, self._as_announced(name))
 
-    @lru_cache()
+    # @lru_cache()
     def get_active_wallet(self):
         wallet = State.get_wallet()
         if not wallet:
@@ -50,7 +49,6 @@ class StateService(object):
 
     def set_announced(self, name):
         State.set(**{name + '_announced': datetime.now().replace(microsecond=0)})
-        self.get_announced.cache_clear()
 
     def set_wallet(self, wallet_id):
         wallet = Wallet.query(id=wallet_id).one_or_none()
@@ -59,7 +57,7 @@ class StateService(object):
             raise NoRecordsFound
 
         State.set(wallet_id=wallet.id)
-        self.get_active_wallet.cache_clear()
+        # self.get_active_wallet.cache_clear()
 
     @property
     def wallet_funds(self):
