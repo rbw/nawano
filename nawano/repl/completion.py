@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import shlex
 import click
 from prompt_toolkit.completion import Completion
@@ -80,7 +81,7 @@ class NawanoCompletion(object):
         suggestions = self._suggest_from_objs(
             reps,
             text_key='address',
-            meta_key='weight',
+            meta_str='{weight}',
             display_key='alias'
         )
 
@@ -96,7 +97,7 @@ class NawanoCompletion(object):
                 return [['', 'requires an active wallet', None]]
             else:
                 if accounts:
-                    return self._suggest_from_objs(accounts, meta_key='available')
+                    return self._suggest_from_objs(accounts, meta_str='{available}|pen:{pending}')
                 else:
                     return [['', 'no accounts found', None]]
         elif self.req_backends:
@@ -105,7 +106,7 @@ class NawanoCompletion(object):
             ]
         elif self.req_aliases:
             aliases = alias_service.get_many()
-            return self._suggest_from_objs(aliases, meta_key='description')
+            return self._suggest_from_objs(aliases, meta_str='{description}')
         elif self.req_wallets:
             wallets = wallet_service.get_many()
             return self._suggest_from_objs(wallets)
@@ -136,9 +137,13 @@ class NawanoCompletion(object):
             yield cmd.name, None, cmd.short_help
 
     @staticmethod
-    def _suggest_from_objs(objs, text_key='name', meta_key=None, display_key=None):
+    def _suggest_from_objs(objs, text_key='name', meta_str=None, display_key=None):
+        def matches():
+            return [match.group(1) for match in re.finditer(r'{(.*?)}', meta_str, re.DOTALL)]
+
         for obj in objs:
-            meta = str(getattr(obj, meta_key)) if meta_key else None
+            meta_keys = {m: getattr(obj, m) for m in matches()}
+            meta = meta_str.format(**meta_keys) if meta_keys else None
             display = getattr(obj, display_key) if display_key else None
             value = getattr(obj, text_key)
             yield (value, display, meta)
