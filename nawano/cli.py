@@ -29,8 +29,8 @@ def _database_seed():
 
 
 def run():
-    if version_info < (3, 5):
-        exit('error: nawano requires Python 3.5 or greater')
+    if version_info < (3, 6):
+        exit('error: nawano requires Python 3.6 or greater')
 
     if len(argv) > 1:
         exit("error: nawano doesn't take arguments")
