@@ -26,20 +26,20 @@ def _refresh_balances():
 def _validate_send(payload):
     account_from = account_service.get_one(name=payload['account_from'], wallet_id=state_service.wallet.id)
     recipient_alias = alias_service.get_one(name=payload['recipient_alias'])
-    amount = Decimal(payload['amount'])
+    send_amount = Decimal(payload['amount'])
 
     if not account_from:
         raise NawanoError('option --account_from must be a valid account name')
     elif not recipient_alias:
         raise NawanoError('option --recipient_alias must be a valid alias')
-    elif amount <= 0:
+    elif send_amount <= 0:
         raise NawanoError('amount must be greater than 0')
-    elif float(account_from.available) < float(amount):
-        missing = Decimal(amount) - Decimal(account_from.available)
+    elif Decimal(account_from.available) < Decimal(send_amount):
+        missing = Decimal(send_amount) - Decimal(account_from.available)
         raise NawanoError('insufficient funds (available: {0}, send_amount: {1} (missing: {2}))'
-                          .format(account_from.available, amount, missing))
+                          .format(account_from.available, send_amount, missing))
 
-    return account_from, recipient_alias, amount
+    return account_from, recipient_alias, send_amount, account_from.available
 
 
 @with_status(text='signing transaction')
