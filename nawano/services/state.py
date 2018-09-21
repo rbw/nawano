@@ -29,7 +29,7 @@ class StateService(object):
 
     @lru_cache()
     def get_wallet_funds(self, wallet_id):
-        available, pending = [Decimal(0), Decimal(0)]
+        available = pending = Decimal(0)
 
         for account in Account.query(wallet_id=wallet_id).all():
             available += Decimal(account.available)
