@@ -3,7 +3,6 @@
 import privy
 import crayons
 
-from decimal import Decimal
 from os import urandom
 from sys import stdout
 from texttable import Texttable
