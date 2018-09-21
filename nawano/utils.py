@@ -25,7 +25,7 @@ def from_raw(amount):
 
 
 def to_raw(amount):
-    return mrai_to_raw(amount)
+    return mrai_to_raw(str(amount))
 
 
 def render_table(header, body):
