@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from simplejson.scanner import JSONDecodeError
 
 from nawano.models import Representative, ConfigAttribute
 from nawano.settings import REPRESENTATIVES_URI
@@ -25,7 +26,11 @@ class RepresentativeService(NawanoService):
 
     def refresh_reps(self):
         # @TODO - look into bulk upserts with SQA
-        representatives = requests.get(REPRESENTATIVES_URI).json()
+        try:
+            representatives = requests.get(REPRESENTATIVES_URI).json()
+        except JSONDecodeError:
+            # @TODO - log error
+            return False
 
         with get_db_session() as s:
             for rep in representatives:
