@@ -23,6 +23,13 @@ def _refresh_balances():
     return None, None
 
 
+@with_status(text='preparing send-block')
+def _sendblock_prepare(**kwargs):
+    validated = _validate_send(kwargs)
+    block, work_hash = block_service.get_sendblock(*validated)
+    return (validated, block, work_hash), None
+
+
 def _validate_send(payload):
     account_from = account_service.get_one(name=payload['account_from'], wallet_id=state_service.wallet.id)
     n_account = state_service.network.get_account(account_get(account_from.public_key))
@@ -85,8 +92,7 @@ def wallet_list():
 @click.option('--recipient_alias', help='name of recipient address alias', required=True)
 @click.option('--amount', help='amount to send', required=True)
 def funds_send(**kwargs):
-    validated = _validate_send(kwargs)
-    block, work_hash = block_service.get_sendblock(*validated)
+    (validated, block, work_hash), _ = _sendblock_prepare(**kwargs)
     stdout.write(block_service.transaction_summary(*validated, block['balance']))
 
     stdout.write('\n---\nenter password to proceed or <ctrl+d> to cancel\n')
