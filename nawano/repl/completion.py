@@ -7,6 +7,7 @@ from prompt_toolkit.completion import Completion
 
 from nawano.services import wallet_service, config_service, alias_service, rep_service, state_service
 from nawano.exceptions import NoActiveWallet
+from nawano.settings import RPC_BACKENDS
 
 
 class NawanoCompletion(object):
@@ -97,13 +98,11 @@ class NawanoCompletion(object):
                 return [['', 'requires an active wallet', None]]
             else:
                 if accounts:
-                    return self._suggest_from_objs(accounts, meta_str='{available}|pen:{pending}')
+                    return self._suggest_from_objs(accounts, meta_str='{available}')
                 else:
                     return [['', 'no accounts found', None]]
         elif self.req_backends:
-            return [
-                ('https://getcanoe.io/rpc', 'canoe', 'canoe RPC backend'),
-            ]
+            return RPC_BACKENDS
         elif self.req_aliases:
             aliases = alias_service.get_many()
             return self._suggest_from_objs(aliases, meta_str='{description}')
@@ -139,7 +138,7 @@ class NawanoCompletion(object):
     @staticmethod
     def _suggest_from_objs(objs, text_key='name', meta_str=None, display_key=None):
         def matches():
-            return [match.group(1) for match in re.finditer(r'{(.*?)}', meta_str, re.DOTALL)]
+            return [match.group(1) for match in re.finditer(r'{(.*?)}', meta_str or '', re.DOTALL)]
 
         for obj in objs:
             meta_keys = {m: getattr(obj, m) for m in matches()}
