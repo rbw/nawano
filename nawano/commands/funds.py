@@ -34,8 +34,8 @@ def _validate_send(payload):
         raise NawanoError('option --recipient_alias must be a valid alias')
     elif amount <= 0:
         raise NawanoError('amount must be greater than 0')
-    elif account_from.available < amount:
-        raise NawanoError('insufficient funds')
+    elif float(account_from.available) < float(amount):
+        raise NawanoError('insufficient funds available ({0})'.format(account_from.available))
 
     return account_from, recipient_alias, amount
 
@@ -43,8 +43,10 @@ def _validate_send(payload):
 @with_status(text='signing transaction')
 def _block_sign(block, seed):
     account = account_service.get_one(public_key=account_key(block['account']))
+    assert account
+
     sk, pk, _ = deterministic_key(seed, account.idx)
-    return sign_block(block, sk, pk)
+    return sign_block(sk, pk, block)
 
 
 @with_status(text='validating')
@@ -108,7 +110,7 @@ def funds_send(**kwargs):
 def funds_pull():
     p_tot = state_service.wallet_funds['pending']
 
-    if p_tot <= 0:
+    if float(p_tot) <= 0:
         raise NawanoError('no pending blocks')
 
     stdout.write(account_service.get_header('receive'))
