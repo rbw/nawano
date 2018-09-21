@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from decimal import Decimal
+import uuid
 
 from libn import account_get, account_key
 
-from nawano.utils import to_raw
+from nawano.utils import to_raw, from_raw
 from ._base import NawanoService
 
 
@@ -35,27 +35,29 @@ class BlockService(NawanoService):
                     'previous': previous,
                 }, work_hash
 
-    def get_sendblock(self, account, alias_to, amount, _):
+    def get_sendblock(self, account, alias_to, amount):
         address = account_get(account.public_key)
         n_account = self.__state__.network.get_account(address)
         new_balance = str(int(n_account['balance']) - int(to_raw(amount)))
+        uid = uuid.uuid4()
 
         return {
               'representative': self.__state__.wallet.representative_address,
               'balance': new_balance,
+              'id': uid.hex[:16],
               'link': account_key(alias_to.address),
               'account': address,
               'previous': n_account['frontier']
         }, n_account['frontier']
 
-    def transaction_summary(self, account_from, alias_to, send_amount, available):
+    def transaction_summary(self, account_from, alias_to, send_amount, new_balance):
         return self._format_output([
             self.get_header('new transaction', color='yellow'),
             'from: {0}/{1}'.format(account_from.name, account_get(account_from.public_key)),
             'to: {0}/{1}'.format(alias_to.name, alias_to.address),
-            'amount: {0} ({1} available after send)'.format(
+            'amount: {0} (new balance: {1})'.format(
                 send_amount,
-                Decimal(available) - Decimal(send_amount)
+                from_raw(new_balance)
             ) + '\n'
         ])
 

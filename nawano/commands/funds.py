@@ -7,7 +7,7 @@ from sys import stdout
 from libn import work_generate, account_get, account_key, deterministic_key, sign_block
 from nawano.services import block_service, account_service, alias_service, state_service
 from nawano.status import with_status
-from nawano.utils import password_input, decrypt
+from nawano.utils import password_input, decrypt, from_raw
 from nawano.exceptions import NawanoError
 from .root import root_group
 
@@ -25,6 +25,7 @@ def _refresh_balances():
 
 def _validate_send(payload):
     account_from = account_service.get_one(name=payload['account_from'], wallet_id=state_service.wallet.id)
+    n_account = state_service.network.get_account(account_get(account_from.public_key))
     recipient_alias = alias_service.get_one(name=payload['recipient_alias'])
     send_amount = Decimal(payload['amount'])
 
@@ -34,12 +35,12 @@ def _validate_send(payload):
         raise NawanoError('option --recipient_alias must be a valid alias')
     elif send_amount <= 0:
         raise NawanoError('amount must be greater than 0')
-    elif Decimal(account_from.available) < Decimal(send_amount):
+    elif Decimal(from_raw(n_account['balance'])) < Decimal(send_amount):
         missing = Decimal(send_amount) - Decimal(account_from.available)
         raise NawanoError('insufficient funds (available: {0}, send_amount: {1} (missing: {2}))'
                           .format(account_from.available, send_amount, missing))
 
-    return account_from, recipient_alias, send_amount, account_from.available
+    return account_from, recipient_alias, send_amount
 
 
 @with_status(text='signing transaction')
@@ -85,13 +86,12 @@ def wallet_list():
 @click.option('--amount', help='amount to send', required=True)
 def funds_send(**kwargs):
     validated = _validate_send(kwargs)
-    stdout.write(block_service.transaction_summary(*validated))
+    block, work_hash = block_service.get_sendblock(*validated)
+    stdout.write(block_service.transaction_summary(*validated, block['balance']))
 
     stdout.write('\n---\nenter password to proceed or <ctrl+d> to cancel\n')
     password = password_input(validate_confirm=False)
     seed = decrypt(state_service.wallet.seed, password).decode('ascii')
-
-    block, work_hash = block_service.get_sendblock(*validated)
 
     stdout.write('\nprocessing {0}\n'.format(block['link']))
 
