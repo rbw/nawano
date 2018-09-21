@@ -3,8 +3,9 @@
 import click
 from prompt_toolkit import prompt
 from sys import stdout
+from libn import deterministic_key
 
-from nawano.services import wallet_service, state_service, rep_service
+from nawano.services import wallet_service, state_service, rep_service, account_service
 from nawano.utils import password_input, decrypt, stylize
 from nawano.status import with_status
 from nawano.exceptions import NawanoError
@@ -14,8 +15,7 @@ from .root import root_group
 @with_status(text='setting active wallet')
 def _wallet_set_active(wallet_id):
     state_service.set_wallet(wallet_id)
-    msg = 'active wallet: {0}'.format(state_service.wallet.name)
-    return None, msg
+    return None, None
 
 
 @with_status(text='decrypting seed')
@@ -23,6 +23,19 @@ def _dump_seed(seed_encrypted, password):
     seed = decrypt(seed_encrypted, password).decode('ascii')
     msg = seed
     return None, msg
+
+
+@with_status(text='validating seed')
+def _validate_seed(seed):
+    if len(seed) != 64:
+        raise NawanoError('must be 64 chars long')
+
+    try:
+        deterministic_key(seed, 0)
+    except ValueError:
+        raise NawanoError('must be a hexadecimal string')
+
+    return seed.upper().encode('ascii'), None
 
 
 @with_status(text='setting representative')
@@ -87,11 +100,26 @@ def wallet_create(**kwargs):
         _wallet_set_active(wallet_id)
 
 
+@wallet_group.command('import', short_help='new wallet, existing seed')
+@click.option('--name', 'name', help='wallet name', callback=_validate_wallet_name, required=True)
+def wallet_import(**kwargs):
+    seed = password_input(validate_confirm=False, pw1_text='seed: ')
+    kwargs['seed'], _ = _validate_seed(seed.decode('ascii'))
+
+    kwargs['password'] = password_input(validate_confirm=True)
+    stdout.write('\n')
+    wallet_id, _ = _wallet_create(**kwargs)
+
+    if prompt('switch to this wallet? [Y/n] ').lower() in ['', 'y']:
+        _wallet_set_active(wallet_id)
+
+
 @wallet_group.command('use', short_help='set active wallet')
 @click.argument('name', required=True)
 def wallet_set_active(name):
     wallet = wallet_service.get_one(raise_on_empty=True, name=name)
-    return _wallet_set_active(wallet.id)
+    _wallet_set_active(wallet.id)
+    account_service.refresh_balances()
 
 
 @wallet_group.command('show', short_help='wallet details')
@@ -116,7 +144,7 @@ def wallet_list(**kwargs):
 def wallet_dump_seed(name):
     stdout.write(
         '\n[{0}] the seed can be used to access your funds; store it securely!\n\n'
-        'enter your wallet password to proceed.\n'.format(stylize('WARNING', color='yellow', bold=True))
+        'enter wallet password to proceed.\n'.format(stylize('WARNING', color='yellow', bold=True))
     )
     password = password_input(validate_confirm=False)
     seed = wallet_service.get_one(raise_on_empty=True, name=name).seed
