@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from functools import lru_cache
+from decimal import Decimal
 from datetime import datetime
-from nanopy.crypto import account_nano
+from libn import account_get
 
 from nawano.clients import RPC
 from nawano.models import ConfigAttribute, Account, State, Wallet
@@ -28,15 +29,15 @@ class StateService(object):
 
     @lru_cache()
     def get_wallet_funds(self, wallet_id):
-        available, pending = [0, 0]
+        available, pending = [Decimal(0), Decimal(0)]
 
         for account in Account.query(wallet_id=wallet_id).all():
-            available += account.available
-            pending += account.pending
+            available += Decimal(account.available)
+            pending += Decimal(account.pending)
 
         return {
-            'available': available,
-            'pending': pending
+            'available': str(available or 0),
+            'pending': str(pending or 0)
         }
 
     @property
@@ -78,5 +79,5 @@ class StateService(object):
         except NoActiveWallet:
             return []
 
-        addresses = [account_nano(account.public_key) for account in accounts]
+        addresses = [account_get(account.public_key) for account in accounts]
         return self.network.get_pending(addresses)
