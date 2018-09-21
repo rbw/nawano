@@ -26,6 +26,12 @@ class AccountService(NawanoService):
         # Derive account from seed
         sk, pk, _ = deterministic_key(seed.decode('ascii'), int(account_idx))
 
+        # Look for existing account with this PK
+        existing = self.__model__.query(public_key=pk).one_or_none()
+
+        if existing:
+            raise NawanoError('account key conflicts with {0} in wallet {1}'.format(existing.name, existing.wallet.name))
+
         account_pk = self.__model__.insert(
             idx=account_idx,
             name=account_name,
