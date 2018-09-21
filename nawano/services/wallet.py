@@ -11,7 +11,7 @@ class WalletService(NawanoService):
 
     def insert(self, **kwargs):
         wallet_name = kwargs.pop('name')
-        seed = generate_seed()
+        seed = kwargs.pop('seed', generate_seed())
 
         return self.__model__.insert(name=wallet_name, seed=encrypt(seed, kwargs.pop('password')))
 
