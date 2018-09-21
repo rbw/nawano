@@ -26,7 +26,7 @@ PROMPT_STYLE = Style([
     ('bottom-toolbar-key', 'bg:ansigray'),
     ('bottom-toolbar-value', 'bg:ansiwhite'),
     ('bottom-toolbar-pending', 'bg:ansiyellow'),
-    ('bottom-toolbar-logo', 'bg:ansipurple bold'),
+    ('bottom-toolbar-logo', 'bg:ansigreen'),
     ('bottom-toolbar', 'fg:ansiblack bg:ansiwhite'),
 ])
 
