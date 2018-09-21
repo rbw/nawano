@@ -3,10 +3,12 @@
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
 
 from nawano.utils import from_raw
 
 from nawano.db import Base, get_db_session
+from .wallet import Wallet
 from ._base import BaseMixin
 
 
@@ -16,6 +18,8 @@ class Account(Base, BaseMixin):
     idx = Column(Integer, nullable=False, primary_key=True)
     name = Column(String, nullable=False)
     wallet_id = Column(String, ForeignKey('wallet.id'), primary_key=True)
+    wallet = relationship(Wallet)
+
     public_key = Column(String, unique=True)
     available_raw = Column(String, nullable=False, default='0')
     pending_raw = Column(String, nullable=False, default='0')
