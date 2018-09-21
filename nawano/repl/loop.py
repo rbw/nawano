@@ -23,7 +23,7 @@ def get_styled_prompt():
 
 def cooldown_reached(key):
     cooldown_secs = config_service.get('notify_cooldown').value
-    return cooldown_secs > (datetime.now() - state_service.get_announced(key)).seconds
+    return cooldown_secs < (datetime.now() - state_service.get_announced(key)).seconds
 
 
 def pending_announce():
@@ -33,8 +33,9 @@ def pending_announce():
         return
 
     if float(funds['pending']) > 0:
-        stdout.write('info: there are pending funds, use {0} to claim now.\n'.format(
-            stylize('funds pull', color='yellow')
+        stdout.write('[{0}] there are pending funds, enter {1} to claim now.\n'.format(
+            stylize('info', color='yellow'),
+            stylize('funds pull', color='green')
         ))
 
         state_service.set_announced('pending')
@@ -51,8 +52,9 @@ def weight_announce():
     max_weight = config_service.get('max_weight').value
 
     if representative.weight > max_weight:
-        stdout.write('info: your representative has too much weight, use {0} to change\n'.format(
-            stylize('wallet representative', color='yellow')
+        stdout.write('[{0}] your representative has too much weight, type {1} to change\n'.format(
+            stylize('info', color='yellow'),
+            stylize('wallet representative', color='green')
         ))
 
         state_service.set_announced('weight')
