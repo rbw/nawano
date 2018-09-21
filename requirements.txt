@@ -11,4 +11,4 @@ sqlalchemy-utils>=0.33.3
 requests>=2.18.4
 pyyaml>=3.12
 texttable>=1.4.0
-git+https://github.com/rbw/nanopy
+libn>=0.1.1

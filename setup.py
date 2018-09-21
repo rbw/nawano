@@ -43,7 +43,7 @@ with io.open('README.md') as readme:
         author_email='rbw@vault13.org',
         maintainer='Robert Wikman',
         maintainer_email='rbw@vault13.org',
-        python_requires='>=3.5',
+        python_requires='>=3.6',
         url='https://github.com/rbw/nawano',
         download_url='https://github.com/rbw/nawano/tarball/%s' % get_version(),
         keywords=['nano', 'cryptocurrency', 'cli', 'wallet'],
