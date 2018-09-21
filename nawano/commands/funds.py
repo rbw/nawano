@@ -4,7 +4,7 @@ import click
 
 from decimal import Decimal
 from sys import stdout
-from nanopy.crypto import pow_generate, nano_account, seed_keys, sign_block
+from libn import work_generate, account_get, account_key, deterministic_key, sign_block
 from nawano.services import block_service, account_service, alias_service, state_service
 from nawano.status import with_status
 from nawano.utils import password_input, decrypt
@@ -13,8 +13,8 @@ from .root import root_group
 
 
 @with_status(text='generating proof-of-work')
-def _pow_generate(data):
-    return pow_generate(data)
+def _pow_generate(_hash):
+    return work_generate(_hash)
 
 
 @with_status(text='refreshing balances')
@@ -42,8 +42,8 @@ def _validate_send(payload):
 
 @with_status(text='signing transaction')
 def _block_sign(block, seed):
-    account = account_service.get_one(public_key=nano_account(block['account']))
-    sk, pk = seed_keys(seed, account.idx)
+    account = account_service.get_one(public_key=account_key(block['account']))
+    sk, pk, _ = deterministic_key(seed, account.idx)
     return sign_block(block, sk, pk)
 
 

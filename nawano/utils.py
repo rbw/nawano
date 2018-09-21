@@ -3,13 +3,12 @@
 import privy
 import crayons
 
-from binascii import hexlify
-
+from decimal import Decimal
 from os import urandom
 from sys import stdout
 from texttable import Texttable
 from prompt_toolkit import prompt
-from nanopy.conversion import convert
+from libn import mrai_from_raw, mrai_to_raw
 
 from nawano.settings import PW_MESSAGE_INFO
 from nawano.validators import PasswordQualityValidator
@@ -20,12 +19,13 @@ def stylize(text, color='white', **kwargs):
     return getattr(crayons, color)(text, **kwargs).__str__()
 
 
-def from_raw(value):
-    return convert(str(value), from_unit='raw', to_unit='Mxrb')
+def from_raw(amount):
+    mrai = mrai_from_raw(amount)
+    return mrai.rstrip('0') if float(mrai) else 0
 
 
-def to_raw(value):
-    return convert(str(value), from_unit='Mxrb', to_unit='raw')
+def to_raw(amount):
+    return mrai_to_raw(amount)
 
 
 def render_table(header, body):
@@ -60,10 +60,6 @@ def password_input(validate_confirm=False, pw1_text='password: ', pw2_text='conf
         return password1
     except (KeyboardInterrupt, EOFError):
         raise NawanoError('aborted')
-
-
-def bin2ascii(data):
-    return hexlify(data).decode('ascii')
 
 
 def generate_seed():

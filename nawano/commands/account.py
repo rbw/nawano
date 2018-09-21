@@ -2,7 +2,7 @@
 
 import click
 from sys import stdout
-from nanopy.crypto import account_nano, nano_account
+from libn import account_get
 from nawano.services import account_service, state_service
 from nawano.status import with_status
 from nawano.utils import password_input
@@ -13,7 +13,7 @@ from .root import root_group
 @with_status(text='creating new account')
 def _account_create(**kwargs):
     public_key = account_service.insert(**kwargs)
-    msg = 'address: {0}'.format(account_nano(public_key))
+    msg = 'address: {0}'.format(account_get(public_key))
     return public_key, msg
 
 
@@ -21,7 +21,7 @@ def _account_create(**kwargs):
 def _account_delete(**kwargs):
     account = account_service.get_one(raise_on_empty=True, **kwargs)
     account_service.delete(**kwargs)
-    msg = 'deleted: {0}/{1}'.format(account.name, account_nano(account.public_key))
+    msg = 'deleted: {0}/{1}'.format(account.name, account_get(account.public_key))
     return None, msg
 
 
