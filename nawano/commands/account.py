@@ -13,6 +13,7 @@ from .root import root_group
 @with_status(text='creating new account')
 def _account_create(**kwargs):
     public_key = account_service.insert(**kwargs)
+    account_service.refresh_balances()
     msg = 'address: {0}'.format(account_get(public_key))
     return public_key, msg
 
