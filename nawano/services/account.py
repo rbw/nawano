@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from nanopy.crypto import nano_account, account_nano, seed_keys
+from libn import account_key, account_get, deterministic_key
 
 from nawano.models import Account
 from nawano.exceptions import NawanoError
-from nawano.utils import decrypt, bin2ascii
+from nawano.utils import decrypt
 
 
 from ._base import NawanoService
@@ -24,12 +24,12 @@ class AccountService(NawanoService):
         account_idx = kwargs.pop('idx', None) or self.__model__.get_next_idx(wallet.id)
 
         # Derive account from seed
-        sk, pk = seed_keys(seed.decode('ascii'), int(account_idx))
+        sk, pk, _ = deterministic_key(seed.decode('ascii'), int(account_idx))
 
         account_pk = self.__model__.insert(
             idx=account_idx,
             name=account_name,
-            public_key=bin2ascii(pk),
+            public_key=pk,
             wallet_id=wallet.id,
             **kwargs
         )
@@ -47,7 +47,7 @@ class AccountService(NawanoService):
                     pending_raw += int(block['amount'])
 
             self.__model__.update(
-                nano_account(address),
+                account_key(address),
                 available_raw=str(available_raw),
                 pending_raw=str(pending_raw)
             )
@@ -62,7 +62,7 @@ class AccountService(NawanoService):
             'index: ' + str(account.idx),
             'name: ' + account.name,
             'updated: ' + str(account.updated_on),
-            'address: ' + account_nano(account.public_key),
+            'address: ' + account_get(account.public_key),
             'pubkey: ' + account.public_key.upper(),
             self.get_highlighted('funds') + self.funds_text({
                 'available': account.available,
@@ -81,7 +81,7 @@ class AccountService(NawanoService):
             yield [
                 a.name,
                 a.idx,
-                '…{0}'.format(account_nano(a.public_key)[-8:]),
+                '…{0}'.format(account_get(a.public_key)[-8:]),
                 a.available,
                 a.pending
             ]
