@@ -32,7 +32,7 @@ def pending_announce():
     except NoActiveWallet:
         return
 
-    if funds['pending'] > 0:
+    if float(funds['pending']) > 0:
         stdout.write('info: there are pending funds, use {0} to claim now.\n'.format(
             stylize('funds pull', color='yellow')
         ))
@@ -67,7 +67,7 @@ def get_bottom_toolbar():
     pending_class = (
         'class:bottom-toolbar-pending'
         if
-        state_service.wallet_funds['pending'] > 0
+        float(state_service.wallet_funds['pending']) > 0
         else
         'class:bottom-toolbar-value'
     )
@@ -77,11 +77,11 @@ def get_bottom_toolbar():
     return [
         ('class:bottom-toolbar-logo', ' ␥ '),
         ('class:bottom-toolbar-key', 'wallet:'),
-        ('class:bottom-toolbar-value', '{0}'.format(wallet.name)),
+        ('class:bottom-toolbar-value', str(wallet.name)),
         ('class:bottom-toolbar-key', ' · available:'),
-        ('class:bottom-toolbar-value', '{0}'.format(funds['available'])),
+        ('class:bottom-toolbar-value', funds['available']),
         ('class:bottom-toolbar-key', ' · pending:'),
-        (pending_class, '{0}'.format(funds['pending'])),
+        (pending_class, funds['pending']),
     ]
 
 
