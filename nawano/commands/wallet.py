@@ -28,7 +28,7 @@ def _dump_seed(seed_encrypted, password):
 @with_status(text='validating seed')
 def _validate_seed(seed):
     if len(seed) != 64:
-        raise NawanoError('must be 64 chars long')
+        raise NawanoError('must be exactly 64 chars in size')
 
     try:
         deterministic_key(seed, 0)
@@ -89,7 +89,7 @@ def wallet_group():
     pass
 
 
-@wallet_group.command('create', short_help='new wallet')
+@wallet_group.command('create', short_help='create a new wallet')
 @click.option('--name', 'name', help='wallet name', callback=_validate_wallet_name, required=True)
 def wallet_create(**kwargs):
     kwargs['password'] = password_input(validate_confirm=True)
@@ -100,7 +100,7 @@ def wallet_create(**kwargs):
         _wallet_set_active(wallet_id)
 
 
-@wallet_group.command('import', short_help='new wallet, existing seed')
+@wallet_group.command('import', short_help='create wallet from existing seed')
 @click.option('--name', 'name', help='wallet name', callback=_validate_wallet_name, required=True)
 def wallet_import(**kwargs):
     seed = password_input(validate_confirm=False, pw1_text='seed: ')
@@ -122,7 +122,7 @@ def wallet_set_active(name):
     account_service.refresh_balances()
 
 
-@wallet_group.command('show', short_help='wallet details')
+@wallet_group.command('show', short_help='show wallet details')
 @click.argument('name', required=True)
 def wallet_show(**kwargs):
     stdout.write(wallet_service.get_details(**kwargs))
@@ -134,7 +134,7 @@ def wallet_set_representative(address):
     return _wallet_set_representative(address)
 
 
-@wallet_group.command('list', short_help='wallet list')
+@wallet_group.command('list', short_help='list all wallets')
 def wallet_list(**kwargs):
     stdout.write(wallet_service.get_table(**kwargs))
 
