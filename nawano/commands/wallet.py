@@ -15,6 +15,7 @@ from .root import root_group
 @with_status(text='setting active wallet')
 def _wallet_set_active(wallet_id):
     state_service.set_wallet(wallet_id)
+    account_service.refresh_balances()
     return None, None
 
 
@@ -119,7 +120,6 @@ def wallet_import(**kwargs):
 def wallet_set_active(name):
     wallet = wallet_service.get_one(raise_on_empty=True, name=name)
     _wallet_set_active(wallet.id)
-    account_service.refresh_balances()
 
 
 @wallet_group.command('show', short_help='show wallet details')
