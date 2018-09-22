@@ -24,9 +24,10 @@ Shows some common wallet operations
 Project status: Development
 --------------
 
-While Nawano works, it should be considered unstable / unsafe / alpha, as it lacks Documentation, Unit Tests and sufficient volume of actual use.
+While Nawano works, it should be considered unstable / unsafe / alpha, as it lacks Documentation, Unit Tests and broad real-world use.
 
-**Todo -> stable**
+Todo [stable]
+-------------
 
 **Quality improvements**
 - [ ] API documentation
@@ -39,9 +40,14 @@ While Nawano works, it should be considered unstable / unsafe / alpha, as it lac
 - [ ] Application logging
 - [ ] Support for Websocket backends
 
+**Guides**
+- [ ] MacOS installation guide
+- [ ] Windows installation guide
+- [ ] Operations/Wiki
 
-Usage
-=====
+
+Usage/Installing
+=======
 
 Ubuntu Linux
 --------
@@ -53,12 +59,12 @@ $ nawano
 
 MacOS
 -----
-Work in progress
+TBA
 
 
 Windows
 -------
-Work in progress
+TBA
 
 
 Author
