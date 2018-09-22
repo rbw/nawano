@@ -11,6 +11,9 @@ Seeds are encrypted with AES-256 and stored along with information about derivat
 
 Please bare in mind that—just as the official Nano software—Nawano uses the *BSD 2-Clause License* (i.e. no liability for loss of funds).
 
+- Want to know more about Nano? Check out the [official website](https://nano.org/en/about).
+
+- Don't have any Nano? You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
 
 
 Demo
@@ -24,7 +27,8 @@ Shows some common wallet operations
 Project status: Development
 --------------
 
-While Nawano works, it should be considered unstable / unsafe / alpha, as it lacks Documentation, Unit Tests and broad real-world use.
+While Nawano does work, it probably should be considered unstable/unsafe/alpha as it lacks Documentation, Unit Tests and extensive real-world use.
+
 
 Todo [stable]
 -------------
