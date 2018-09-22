@@ -144,7 +144,7 @@ def wallet_list(**kwargs):
 def wallet_dump_seed(name):
     stdout.write(
         '\n[{0}] the seed can be used to access your funds; store it securely!\n\n'
-        'enter wallet password to proceed.\n'.format(stylize('WARNING', color='yellow', bold=True))
+        'enter wallet password to proceed.\n'.format(stylize('info', color='yellow'))
     )
     password = password_input(validate_confirm=False)
     seed = wallet_service.get_one(raise_on_empty=True, name=name).seed
