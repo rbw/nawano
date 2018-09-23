@@ -46,7 +46,7 @@ Beta
 
 **Guides**
 - [X] Linux installation guide
-- [ ] MacOS installation guide
+- [X] MacOS installation guide
 - [ ] Windows installation guide
 - [ ] Operations/Wiki
 
@@ -66,14 +66,17 @@ Ubuntu Linux
 --------
 ```bash
 $ sudo apt-get install libb2-dev
-$ sudo pip3 install nawano
+$ sudo pip3 install nawano --upgrade
 $ nawano
 ```
 
 MacOS
 -----
-TBA
-
+```bash
+$ brew install cmake gcc libb2 python3
+$ sudo CC=/usr/local/bin/gcc-8 pip3.7 install nawano --upgrade
+$ nawano
+```
 
 Windows
 -------
