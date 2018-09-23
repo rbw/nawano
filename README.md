@@ -62,6 +62,8 @@ Future
 Usage/Installing
 =======
 
+Nawano requires Python >= 3.6 and libb2 development files.
+
 Ubuntu Linux
 --------
 ```bash
