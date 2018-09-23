@@ -30,8 +30,8 @@ Project status: Development/Testing
 While Nawano does work, it probably should be considered unstable/unsafe/alpha as it lacks Documentation, Unit Tests and extensive real-world use.
 
 
-Todo [stable]
--------------
+Beta
+----
 
 **Quality improvements**
 - [ ] API documentation
@@ -51,8 +51,8 @@ Todo [stable]
 - [ ] Operations/Wiki
 
 
-Other [future]
---------------
+Future
+------
 - Ledger integration
 - Yubikey integration
 - Official Debian package
