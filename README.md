@@ -24,7 +24,7 @@ Shows some common wallet operations
 [![asciicast](https://asciinema.org/a/HevbcFFyi2OT7KJ6kpLyVbqJo.png)](https://asciinema.org/a/HevbcFFyi2OT7KJ6kpLyVbqJo)
 
 
-Project status: Development
+Project status: Development/Testing
 --------------
 
 While Nawano does work, it probably should be considered unstable/unsafe/alpha as it lacks Documentation, Unit Tests and extensive real-world use.
@@ -36,7 +36,7 @@ Todo [stable]
 **Quality improvements**
 - [ ] API documentation
 - [ ] Usage documentation
-- [ ] Add *Unit Tests*
+- [ ] Unit tests & TravisCI
 - [ ] Test more OSes
 
 **Features**
@@ -45,9 +45,18 @@ Todo [stable]
 - [ ] Support for Websocket backends
 
 **Guides**
+- [X] Linux installation guide
 - [ ] MacOS installation guide
 - [ ] Windows installation guide
 - [ ] Operations/Wiki
+
+
+Other [future]
+--------------
+- Ledger integration
+- Yubikey integration
+- Official Debian package
+- LSM support (SELinux/AppArmor)
 
 
 Usage/Installing
