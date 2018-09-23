@@ -29,7 +29,6 @@ with io.open('README.md') as readme:
             'privy==6.0.0',
             'pyblake2==1.1.2',
             'passwordmeter==0.1.8',
-            'marshmallow>=2.15.1',
             'simplejson>=3.11.1',
             'click>=6.7',
             'prompt-toolkit>=2.0.4',
