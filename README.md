@@ -45,8 +45,8 @@ Beta
 - [ ] Support for Websocket backends
 
 **Guides**
-- [X] Linux installation guide
-- [X] MacOS installation guide
+- [X] Linux install instructions
+- [X] MacOS install instructions
 - [ ] Windows installation guide
 - [ ] Operations/Wiki
 
@@ -67,7 +67,7 @@ Nawano requires Python >= 3.6 and libb2 development files.
 Ubuntu Linux
 --------
 ```bash
-$ sudo apt-get install libb2-dev
+$ sudo apt-get install gcc libb2-dev python3
 $ sudo pip3 install nawano --upgrade
 $ nawano
 ```
@@ -75,8 +75,8 @@ $ nawano
 MacOS
 -----
 ```bash
-$ brew install cmake gcc libb2 python3
-$ sudo CC=/usr/local/bin/gcc-8 pip3.7 install nawano --upgrade
+$ brew install gcc libb2 libomp python3
+$ sudo install nawano --upgrade
 $ nawano
 ```
 
