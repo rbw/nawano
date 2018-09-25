@@ -11,9 +11,13 @@ Seeds are encrypted with AES-256 and stored along with information about derivat
 
 Please bare in mind that—just as the official Nano software—Nawano uses the *BSD 2-Clause License* (i.e. no liability for loss of funds).
 
-- Want to know more about Nano? Check out the [official website](https://nano.org/en/about).
+**Want to know more about Nano?** 
 
-- Don't have any Nano? You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
+- Check out the [official website](https://nano.org/en/about).
+
+**Want some free Nano to get started?**
+ 
+- You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
 
 
 Demo
@@ -35,7 +39,7 @@ Beta
 
 **Quality improvements**
 - [ ] API documentation
-- [ ] Usage documentation
+- [ ] Usage documentation (Wiki)
 - [ ] Unit tests & TravisCI
 - [ ] Test more OSes
 
@@ -44,11 +48,10 @@ Beta
 - [ ] Application logging
 - [ ] Support for Websocket backends
 
-**Guides**
-- [X] Linux install instructions
-- [X] MacOS install instructions
-- [ ] Windows installation guide
-- [ ] Operations/Wiki
+**Install guides**
+- [X] Linux install
+- [X] MacOS install
+- [X] Windows install
 
 
 Future
@@ -67,7 +70,7 @@ Nawano requires Python >= 3.6 and libb2 development files.
 Ubuntu Linux
 --------
 ```bash
-$ sudo apt-get install gcc libb2-dev python3
+$ sudo apt-get install libb2-dev libomp-dev python3
 $ sudo pip3 install nawano --upgrade
 $ nawano
 ```
@@ -82,9 +85,14 @@ $ nawano
 
 Windows
 -------
-TBA
+Nawano can be installed in Microsoft Windows using WSL.
+
+1. Enable WSL: https://docs.microsoft.com/en-us/windows/wsl/install-win10 
+2. Install the **latest version of Ubuntu Linux** using **Microsoft Store** and start it.
+3. Follow the **Ubuntu Linux** installation guide above.
+4. Close the terminal window and create a desktop shortcut with location: ```wsl nawano```
 
 
 Author
 ------
-Robert Wikman \<rbw@vault13.org\>
+Robert Wikman <rbw@vault13.org>
