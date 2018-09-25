@@ -5,11 +5,9 @@
             100% OSS, BSD-2
 ```
 
-Nawano is a lightweight, secure and fast [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) command-line application that provides a simple and intuative interface for managing Nano funds.
+Nawano is a simple, secure and lightweight Nano funds management software that lets you set up a fully functional light-wallet locally on your machine and get started in just a few minutes — without doing any syncing, and without having to trust a wallet provider on the *World Wide Web*.
 
-Seeds are encrypted with AES-256 and stored along with information about derivate keys locally.
-
-Please bare in mind that—just as the official Nano software—Nawano uses the *BSD 2-Clause License* (i.e. no liability for loss of funds).
+Seeds are encrypted with AES-256 and never leaves your computer. Node communication is done over RPC, using either a remote backend (such as Canoe) or a local node.
 
 **Want to know more about Nano?** 
 
@@ -18,6 +16,9 @@ Please bare in mind that—just as the official Nano software—Nawano uses the 
 **Want some free Nano to get started?**
  
 - You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
+
+
+Please bare in mind that—just as the official Nano software—Nawano uses the *BSD 2-Clause License* (i.e. no liability for loss of funds).
 
 
 Demo
@@ -49,9 +50,9 @@ Beta
 - [ ] Support for Websocket backends
 
 **Install guides**
-- [X] Linux install
-- [X] MacOS install
-- [X] Windows install
+- [X] Linux
+- [X] MacOS
+- [X] Windows
 
 
 Future
@@ -65,7 +66,10 @@ Future
 Usage/Installing
 =======
 
-Nawano requires Python >= 3.6 and libb2 development files.
+**Requirements**
+- Python >= 3.6
+- libb2 (Blake2)
+- libomp (OpenMP)
 
 Ubuntu Linux
 --------
