@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import argv, exit, stdout, version_info
-from os import path, makedirs, mknod
+from os import path, makedirs
 from nawano.utils import stylize
 from nawano.models import meta_create_all, State
 from nawano.commands import cli
@@ -17,7 +17,7 @@ def _home_create():
 
 @with_status(text='touching history')
 def _history_touch():
-    mknod(HISTORY_PATH)
+    open(HISTORY_PATH, 'w').close()
 
 
 @with_status(text='seeding database')

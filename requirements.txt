@@ -1,5 +1,4 @@
 privy==6.0.0
-marshmallow==2.15.1
 pyblake2==1.1.2
 passwordmeter==0.1.8
 simplejson>=3.11.1
@@ -11,4 +10,4 @@ sqlalchemy-utils>=0.33.3
 requests>=2.18.4
 pyyaml>=3.12
 texttable>=1.4.0
-libn>=0.1.1
+libn>=0.1.4
