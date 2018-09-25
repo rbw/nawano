@@ -5,10 +5,9 @@
             100% OSS, BSD-2
 ```
 
-Nawano is a simple, fast and secure Nano funds management software that lets you set up a fully functional light-wallet locally on your machine and get started in just a few minutes — without doing any syncing, and without having to trust a wallet provider on the *World Wide Web*.
+Nawano is a simple, fast and secure Nano currency management software that lets you set up a light-wallet locally on your machine and get started in just a few minutes — without doing any syncing, and without having to trust a wallet provider on the *World Wide Web*.
 
-- Seeds are encrypted with AES-256 and never leaves your computer.
-- Node communication is done over RPC, using either a remote backend (such as Canoe) or a local node.
+Seeds are encrypted with AES-256 and never leaves your computer. Node communication is done over RPC, using either a remote backend (such as Canoe) or a local node.
 
 **Want to know more about Nano?** 
 
@@ -101,4 +100,4 @@ Please bare in mind that—just as the official Nano software—Nawano uses the 
 
 Author
 ------
-Robert Wikman <rbw@vault13.org>
+Robert Wikman \<rbw@vault13.org\>
