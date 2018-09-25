@@ -36,7 +36,7 @@ with io.open('README.md') as readme:
             'sqlalchemy-utils>=0.33.3',
             'requests>=2.18.4',
             'texttable>=1.4.0',
-            'libn>=0.1.1',
+            'libn>=0.1.4',
             'crayons>=0.1.2'  # @TODO - remove
         ],
         author='Robert Wikman',
