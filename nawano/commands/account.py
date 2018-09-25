@@ -58,7 +58,7 @@ def account_create(**kwargs):
     _account_create(**kwargs)
 
 
-@account_group.command('show', short_help='show wallet details')
+@account_group.command('show', short_help='show account details')
 # @click.option('--name', 'name', help='account name', required=False)
 # @click.option('--address', 'address', help='account address', required=False)
 # @click.option('--index', 'idx', help='account index', required=False)
