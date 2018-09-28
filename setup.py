@@ -15,7 +15,7 @@ def get_version():
                 return ast.parse(line).body[0].value.s
 
 
-if sys.platform == 'linux':
+if sys.platform == 'darwin':
     # override nanopy/libn defaults for OSX
     os.environ['USE_GPU'] = os.environ.get('USE_GPU', '1')
     os.environ['LINK_OMP'] = os.environ.get('LINK_OMP', '1')
