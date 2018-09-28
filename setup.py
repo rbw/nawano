@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+import os
 import io
 import ast
 
@@ -11,6 +13,12 @@ def get_version():
         for line in input_file:
             if line.startswith('__version__'):
                 return ast.parse(line).body[0].value.s
+
+
+if sys.platform == 'linux':
+    # override nanopy/libn defaults for OSX
+    os.environ['USE_GPU'] = os.environ.get('USE_GPU', '1')
+    os.environ['LINK_OMP'] = os.environ.get('LINK_OMP', '1')
 
 
 with io.open('README.md') as readme:
@@ -36,7 +44,7 @@ with io.open('README.md') as readme:
             'sqlalchemy-utils>=0.33.3',
             'requests>=2.18.4',
             'texttable>=1.4.0',
-            'libn>=0.1.4',
+            'libn>=0.1.7',
             'crayons>=0.1.2'  # @TODO - remove
         ],
         author='Robert Wikman',
