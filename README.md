@@ -5,7 +5,7 @@
             100% OSS, BSD-2
 ```
 
-Nawano is a simple, fast and secure way to manage your Nano funds locally—without doing any syncing, and without having to trust a wallet provider on the *World Wide Web*.
+Nawano provides a simple, fast and secure way of managing your Nano funds locally—without doing any syncing, and without having to trust a wallet provider on the *World Wide Web*.
 
 Seeds are encrypted with AES-256 and never leaves your computer.
 
