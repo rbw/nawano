@@ -32,7 +32,7 @@ Installing
 ----------
 
 Available pip/install environment variables:
-  - `USE_GPU=1|0`
+- `USE_GPU=1|0`
   * Linux: Install OpenCL libs and set to 1 to use the GPU for work generation
   * OSX: Should work directly with OS-default OpenCL libs, simply pass `USE_GPU=1` to pip3.
 - `LINK_OMP=1|0`
