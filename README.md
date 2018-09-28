@@ -31,9 +31,9 @@ Shows some common wallet operations.
 Installing
 ----------
 
-available setup (pip) environment variables:
-- `CC=/path/to/c/compiler>`
-  * ALL: Path to C compiler (implicitly disables searching for a recent gcc in path)
+Available setup (pip) environment variables:
+- `CC=/path/to/c/compiler`
+  * ALL: Path to C compiler (searches for an up-to-date gcc in path by default)
 - `USE_GPU=1|0`
   * Linux: Install OpenCL libs and set to 1 to use the GPU for work generation
   * OSX: Should work directly with OS-default OpenCL libs, simply pass `USE_GPU=1` to pip3.
