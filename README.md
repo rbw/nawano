@@ -31,12 +31,17 @@ Shows some common wallet operations.
 Installing
 ----------
 
+available setup (pip) environment variables:
+- `CC=/path/to/c/compiler>`
+  * ALL: Path to C compiler (implicitly disables searching for a recent gcc in path)
+- `USE_GPU=1|0`
+  * Linux: Install OpenCL libs and set to 1 to use the GPU for work generation
+  * OSX: Should work directly with OS-default OpenCL libs, simply pass `USE_GPU=1` to pip3.
+- `LINK_OMP=1|0`
+  * Linux: Not used
+  * OSX: Linking of libomp. Set to 0 to use gcc with builtin GOMP
 
 **Linux (Ubuntu)**
-
-available setup (pip) environment variables:
-- USE_GPU (install OpenCL libs and set to 1 to use the GPU for work generation)
-
 
 ```bash
 $ sudo apt-get install libb2-dev python3
@@ -46,14 +51,9 @@ $ nawano
 
 **MacOS**
 
-available setup (pip) environment variables:
-- USE_GPU (enabled by default, set to 0 to use CPU for work generation)
-- LINK_OMP (enabled by default, set to 0 to use gcc with builtin GOMP)
-
-
 ```bash
 $ brew install gcc libb2 libomp python3
-$ sudo pip3 install nawano --upgrade
+$ sudo LINK_OMP=1 pip3 install nawano --upgrade
 $ nawano
 ```
 
