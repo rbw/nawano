@@ -31,16 +31,16 @@ Shows some common wallet operations.
 Installing
 ----------
 
-Available setup (pip) environment variables:
-- `CC=/path/to/c/compiler`
-  * ALL: Path to C compiler (searches for an up-to-date gcc in path by default)
-- `USE_GPU=1|0`
+Available pip/install environment variables:
+  - `USE_GPU=1|0`
   * Linux: Install OpenCL libs and set to 1 to use the GPU for work generation
   * OSX: Should work directly with OS-default OpenCL libs, simply pass `USE_GPU=1` to pip3.
 - `LINK_OMP=1|0`
   * Linux: Not used
   * OSX: Linking of libomp. Set to 0 to use gcc with builtin GOMP
-
+- `CC=<path>`
+  * ALL: Custom C compiler, instead of letting Nawano choose one for you
+  
 **Linux (Ubuntu)**
 
 ```bash
@@ -91,9 +91,10 @@ While Nawano does work, it's currently under heavy development and should probab
 
 Future plans
 ------
-- Ledger integration
-- Yubikey integration
-- Official Debian package
+1. Address-sharing mechanism
+2. Ledger integration
+3. Yubikey integration
+4. Official Debian package
 
 
 License
