@@ -31,7 +31,12 @@ Shows some common wallet operations.
 Installing
 ----------
 
+
 **Linux (Ubuntu)**
+
+available setup (pip) environment variables:
+- USE_GPU (install OpenCL libs and set to 1 to use the GPU for work generation)
+
 
 ```bash
 $ sudo apt-get install libb2-dev python3
@@ -40,6 +45,11 @@ $ nawano
 ```
 
 **MacOS**
+
+available setup (pip) environment variables:
+- USE_GPU (enabled by default, set to 0 to use CPU for work generation)
+- LINK_OMP (enabled by default, set to 0 to use gcc with builtin GOMP)
+
 
 ```bash
 $ brew install gcc libb2 libomp python3
