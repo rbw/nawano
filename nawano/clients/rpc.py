@@ -48,9 +48,6 @@ class RPC(object):
     def get_supply(self):
         return self._request({'action': 'available_supply'})
 
-    def get_representatives(self):
-        return self._request({'action': 'representatives'})
-
     def get_account(self, address):
         payload = {
             'action': 'account_info',
