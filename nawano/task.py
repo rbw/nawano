@@ -41,3 +41,13 @@ class Task(Thread):
         while True:
             self._loop.call_soon_threadsafe(self._func)
             await asyncio.sleep(self._interval)
+
+
+def tasks_start(tasks_args):
+    tasks = []
+    for task_args in tasks_args:
+        task = Task(*task_args)
+        task.start()
+        tasks.append(task)
+
+    return tasks
