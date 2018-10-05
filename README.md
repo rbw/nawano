@@ -80,6 +80,7 @@ While Nawano does work, it's currently under heavy development and should probab
 - [ ] Unit tests & TravisCI
 
 **Features**
+- [ ] NanoBeam default backend
 - [ ] Transaction history
 - [ ] Application logging
 
@@ -93,6 +94,7 @@ Future plans
 ------
 - Ledger integration
 - Yubikey integration
+- Daily lottery mini-game
 - Official Debian package
 
 
