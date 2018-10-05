@@ -31,9 +31,10 @@ PROMPT_STYLE = Style([
 ])
 
 RPC_BACKENDS = [
-    ('https://getcanoe.io/rpc', 'canoe', 'canoe RPC backend'),
-    ('http://[::1]:7076', 'local IPv6', 'local RPC on port 7076'),
-    ('http://127.0.0.1:7076', 'local IPv4', 'local RPC on port 7076'),
+    ('https://getcanoe.io/rpc', 'canoe', 'Canoe RPC proxy'),
+    ('https://nanobeam.vault13.org/rpc', 'nanobeam', 'NanoBeam RPC proxy'),
+    ('http://[::1]:7076', 'local IPv6', 'Local RPC on port 7076'),
+    ('http://127.0.0.1:7076', 'local IPv4', 'Local RPC on port 7076'),
 ]
 
 PW_MESSAGE_INFO = [
