@@ -25,7 +25,6 @@ class RepresentativeService(NawanoService):
         )
 
     def refresh_reps(self):
-        # @TODO - look into bulk upserts with SQA
         try:
             representatives = requests.get(REPRESENTATIVES_URI).json()
         except JSONDecodeError:
@@ -54,5 +53,3 @@ class RepresentativeService(NawanoService):
                 s.flush()
 
             s.commit()
-
-        # self.__state__.get_active_wallet.cache_clear()
