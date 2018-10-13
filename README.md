@@ -17,7 +17,7 @@ Node communication is done over RPC; locally or using a remote backend (such as 
 
 **Want some free Nano to get started?**
  
-- You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
+- You can get a small amount for testing purposes at [nano-faucet.org](https://nanofaucet.org)
 
 
 Demo
