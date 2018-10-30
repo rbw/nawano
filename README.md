@@ -9,7 +9,7 @@ Nawano provides a simple, fast and secure way of managing your Nano funds locall
 
 Seeds are encrypted with AES-256 and never leaves your computer.
 
-Node communication is done over RPC; locally or using a remote backend (such as Canoe).
+Node communication is done over RPC; either locally or using a proxy (such as [NanoStorm](https://github.com/rbw/nanostorm))
 
 **Want to know more about Nano?** 
 
@@ -17,7 +17,8 @@ Node communication is done over RPC; locally or using a remote backend (such as 
 
 **Want some free Nano to get started?**
  
-- You can get a small amount for testing purposes at [nano-faucet.org](https://nano-faucet.org)
+- You can get a small amount for testing purposes at [nanofaucet.org](https://nanofaucet.org) or [nano-faucet.org](https://nano-faucet.org).
+
 
 
 Demo
@@ -80,7 +81,7 @@ While Nawano does work, it's currently under heavy development and should probab
 - [ ] Unit tests & TravisCI
 
 **Features**
-- [ ] NanoBeam default backend
+- [X] NanoStorm backend
 - [ ] Transaction history
 - [ ] Application logging
 
@@ -94,7 +95,6 @@ Future plans
 ------
 - Ledger integration
 - Yubikey integration
-- Daily lottery mini-game
 - Official Debian package
 
 
