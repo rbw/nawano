@@ -42,7 +42,7 @@ def _validate_send(payload):
         raise NawanoError('option --recipient_alias must be a valid alias')
     elif send_amount <= 0:
         raise NawanoError('amount must be greater than 0')
-    elif Decimal(from_raw(n_account['balance'])) < Decimal(send_amount):
+    elif not n_account or Decimal(from_raw(n_account['balance'])) < Decimal(send_amount):
         missing = Decimal(send_amount) - Decimal(account_from.available)
         raise NawanoError('insufficient funds (available: {0}, send_amount: {1} (missing: {2}))'
                           .format(account_from.available, send_amount, missing))

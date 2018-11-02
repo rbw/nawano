@@ -16,7 +16,7 @@ class RPC(object):
         try:
             response = self._session.post(url=self._uri, json=payload).json()
         except JSONDecodeError:
-            raise UnexpectedBackendResponse(message='unexpected response from server')
+            raise UnexpectedBackendResponse(message='Non-JSON response from backend')
 
         if 'error' in response:
             raise UnexpectedBackendResponse(message=response['error'])
